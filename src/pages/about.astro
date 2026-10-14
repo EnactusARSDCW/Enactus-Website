@@ -136,10 +136,14 @@ import { site } from '../data/site';
   }
 
   .mvv article {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: var(--space-5);
+    background: var(--tile-surface);
+    border: 0;
+    border-radius: var(--radius-xl);
+    padding: var(--space-5) var(--space-6);
+    box-shadow:
+      var(--shadow-tile-sm),
+      inset 0 1px 0 rgba(255, 255, 255, 0.95),
+      inset 0 0 0 1px rgba(32, 32, 32, 0.055);
   }
 
   .mvv p,
@@ -196,12 +200,13 @@ import { site } from '../data/site';
 
   .steps li {
     counter-increment: step;
-    background: var(--bg-alt);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
+    background: var(--tile-surface);
+    border: 0;
+    border-radius: var(--radius-lg);
     padding: var(--space-4) var(--space-5) var(--space-4) 5.2rem;
     position: relative;
     color: var(--ink-2);
+    box-shadow: inset 0 0 0 1px rgba(32, 32, 32, 0.05);
   }
 
   .steps li::before {

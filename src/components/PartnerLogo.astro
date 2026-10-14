@@ -35,15 +35,24 @@ const href = partner.url ?? undefined;
     display: flex;
     gap: var(--space-4);
     align-items: flex-start;
-    background: var(--bg-alt);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: var(--space-5);
+    background: var(--tile-surface);
+    border: 0;
+    border-radius: var(--radius-xl);
+    padding: var(--space-5) var(--space-6);
     height: 100%;
+    box-shadow:
+      var(--shadow-tile-sm),
+      inset 0 1px 0 rgba(255, 255, 255, 0.95),
+      inset 0 0 0 1px rgba(32, 32, 32, 0.055);
+    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.3, 1), box-shadow 0.4s ease;
   }
 
   a.partner-logo:hover {
-    box-shadow: var(--shadow-sm);
+    transform: translateY(-4px);
+    box-shadow:
+      var(--shadow-tile-hover),
+      inset 0 1px 0 rgba(255, 255, 255, 0.95),
+      inset 0 0 0 1px rgba(32, 32, 32, 0.055);
   }
 
   .partner-logo__img {

@@ -189,12 +189,13 @@ const relatedProjects = (project.relatedProjects ?? []).map((s) => getProject(s)
   }
 
   .approach li {
-    background: var(--bg-alt);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: var(--space-4) var(--space-5);
+    background: var(--tile-surface);
+    border: 0;
+    border-radius: var(--radius-lg);
+    padding: var(--space-4) var(--space-5) var(--space-4) 3rem;
     color: var(--ink-2);
     position: relative;
+    box-shadow: inset 0 0 0 1px rgba(32, 32, 32, 0.05);
   }
 
   .approach li::before {
@@ -212,10 +213,14 @@ const relatedProjects = (project.relatedProjects ?? []).map((s) => getProject(s)
   }
 
   .activity {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: var(--space-5);
+    background: var(--tile-surface);
+    border: 0;
+    border-radius: var(--radius-xl);
+    padding: var(--space-5) var(--space-6);
+    box-shadow:
+      var(--shadow-tile-sm),
+      inset 0 1px 0 rgba(255, 255, 255, 0.95),
+      inset 0 0 0 1px rgba(32, 32, 32, 0.055);
   }
 
   .activity h3 {
@@ -236,10 +241,14 @@ const relatedProjects = (project.relatedProjects ?? []).map((s) => getProject(s)
   }
 
   .outcome {
-    background: var(--bg-alt);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: var(--space-5);
+    background: var(--tile-surface);
+    border: 0;
+    border-radius: var(--radius-xl);
+    padding: var(--space-5) var(--space-6);
+    box-shadow:
+      var(--shadow-tile-sm),
+      inset 0 1px 0 rgba(255, 255, 255, 0.95),
+      inset 0 0 0 1px rgba(32, 32, 32, 0.055);
   }
 
   .outcome h3 {

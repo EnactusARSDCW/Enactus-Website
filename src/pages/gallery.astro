@@ -109,22 +109,37 @@ import { gallerySections } from '../data/gallery';
   .photo-slot {
     width: 100%;
     aspect-ratio: 4 / 3;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    background: linear-gradient(135deg, rgba(213, 166, 46, 0.05) 0%, transparent 45%), var(--bg-alt);
+    border: 0;
+    border-radius: var(--radius-xl);
+    background: var(--tile-pending);
+    box-shadow:
+      var(--shadow-tile-sm),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8),
+      inset 0 0 0 1px rgba(32, 32, 32, 0.045);
     display: grid;
     place-items: center;
-    padding: var(--space-4);
+    padding: var(--space-5);
     cursor: zoom-in;
     color: var(--ink-2);
-    font-size: 0.85rem;
     text-align: center;
-    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.3, 1), box-shadow 0.4s ease;
   }
 
   .photo-slot:hover {
-    border-color: var(--accent);
-    box-shadow: var(--shadow-sm);
+    transform: translateY(-4px);
+    box-shadow:
+      var(--shadow-tile-hover),
+      inset 0 1px 0 rgba(255, 255, 255, 0.85),
+      inset 0 0 0 1px rgba(213, 166, 46, 0.35);
+  }
+
+  .photo-slot__label {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    color: rgba(32, 32, 32, 0.6);
+    max-width: 20ch;
   }
 
   /* Lightbox */
@@ -171,9 +186,10 @@ import { gallerySections } from '../data/gallery';
   }
 
   .lightbox__stage {
-    border: 1px dashed var(--border);
-    border-radius: var(--radius-md);
-    background: var(--bg-alt);
+    border: 0;
+    border-radius: var(--radius-lg);
+    background: var(--tile-pending);
+    box-shadow: inset 0 0 0 1px rgba(32, 32, 32, 0.05);
     aspect-ratio: 16 / 9;
     display: grid;
     place-items: center;

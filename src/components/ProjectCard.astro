@@ -4,119 +4,110 @@ import { getProject } from '../data/projects';
 
 interface Props {
   slug: string;
-  /** Layout variant: editorial (default) or featured (wider image). */
+  /**
+   * editorial — photograph tile with a frosted panel floating over it.
+   * featured  — wider split tile: photograph bleeding into a glass surface.
+   */
   variant?: 'editorial' | 'featured';
 }
 
 const { slug, variant = 'editorial' } = Astro.props;
 const project = getProject(slug);
 if (!project) throw new Error(`Unknown project slug: ${slug}`);
+
+const isFeatured = variant === 'featured';
+const linkLabel = `${project.name} — ${project.category}. Explore the project.`;
 ---
 
-<article class:list={['project-card', `project-card--${variant}`]}>
-  <a href={`/projects/${project.slug}`} class="project-card__media-link">
+<article class:list={['tile', isFeatured ? 'tile--glass' : 'tile--photo', 'project-card', `project-card--${variant}`]}>
+  <div class="project-card__media">
     <ImagePlaceholder
       image={project.image}
       alt={project.imageAlt}
       label="Project photograph to be added"
-      ratio={variant === 'featured' ? 'wide' : 'photo'}
-      class="project-card__media"
+      variant="fill"
     />
-  </a>
-  <div class="project-card__body">
-    <p class="project-card__category">{project.category}</p>
-    <h3 class="project-card__title">
-      <a href={`/projects/${project.slug}`}>{project.name}</a>
-    </h3>
-    <p class="project-card__summary">{project.summary}</p>
-    <a class="read-more" href={`/projects/${project.slug}`}>
-      Explore the project <span aria-hidden="true">→</span>
-    </a>
+    {!isFeatured && <span class="tile__scrim" aria-hidden="true"></span>}
   </div>
+
+  <div
+    class:list={[
+      'tile__panel',
+      'project-card__panel',
+      isFeatured ? 'project-card__panel--solid' : 'tile__panel--frost project-card__panel--float',
+    ]}
+  >
+    <p class="tile__eyebrow">{project.category}</p>
+    <h3 class:list={['tile__title', isFeatured && 'tile__title--lg']}>{project.name}</h3>
+    <p class="tile__desc tile__desc--clamp">{project.summary}</p>
+    <span class="tile__cta" aria-hidden="true">Explore the project <span aria-hidden="true">→</span></span>
+  </div>
+
+  <a class="tile__cover" href={`/projects/${project.slug}`} aria-label={linkLabel}></a>
 </article>
 
 <style>
-  .project-card {
-    display: flex;
-    flex-direction: column;
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    transition: box-shadow 0.25s ease, transform 0.25s ease;
-    height: 100%;
-  }
-
-  .project-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+  /* ---------- Editorial: full-bleed photograph, frosted panel over it ---------- */
+  .project-card--editorial {
+    aspect-ratio: 4 / 5;
+    min-height: 24rem;
   }
 
   .project-card__media {
-    border: 0;
-    border-bottom: 1px solid var(--border);
-    border-radius: 0;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
   }
 
-  .project-card__body {
-    padding: var(--space-5);
+  .project-card__panel--float {
+    position: absolute;
+    z-index: 2;
+    inset: auto 0.7rem 0.7rem;
+  }
+
+  /* ---------- Featured: photograph and glass surface share one tile ---------- */
+  .project-card--featured {
+    display: grid;
+    min-height: 0;
+  }
+
+  .project-card--featured .project-card__media {
+    position: relative;
+    inset: auto;
+    min-height: 16rem;
+    aspect-ratio: 16 / 11;
+  }
+
+  .project-card--featured .project-card__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 72%, rgba(255, 255, 255, 0.92) 100%);
+  }
+
+  .project-card__panel--solid {
+    position: relative;
+    z-index: 2;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: clamp(1.5rem, 3vw, 2.6rem);
     display: flex;
     flex-direction: column;
-    flex: 1;
-    gap: 0.4rem;
+    justify-content: center;
   }
 
-  .project-card__category {
-    font-family: var(--font-heading);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent-deep);
-    margin: 0;
-  }
+  @media (min-width: 860px) {
+    .project-card--featured {
+      grid-template-columns: 1.08fr 0.92fr;
+    }
 
-  .project-card__title {
-    font-size: 1.25rem;
-    margin: 0;
-  }
-
-  .project-card__title a {
-    color: var(--ink);
-  }
-
-  .project-card__title a:hover {
-    color: var(--accent-deep);
-  }
-
-  .project-card__summary {
-    color: var(--ink-2);
-    font-size: 0.95rem;
-    margin: 0;
-    flex: 1;
-  }
-
-  .read-more {
-    font-family: var(--font-heading);
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--accent-deep);
-    margin-top: var(--space-3);
-  }
-
-  .read-more:hover {
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    color: var(--accent-deep);
-  }
-
-  /* Featured variant: roomier type for wide layouts */
-  .project-card--featured .project-card__title {
-    font-size: 1.5rem;
-  }
-
-  .project-card--featured .project-card__summary {
-    font-size: 1rem;
-    max-width: 52ch;
+    .project-card--featured .project-card__media {
+      aspect-ratio: auto;
+      height: 100%;
+      min-height: 24rem;
+    }
   }
 </style>

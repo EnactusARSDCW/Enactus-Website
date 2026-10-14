@@ -16,73 +16,94 @@ interface Props {
 
 const { member, placeholder = false, placeholderNote } = Astro.props;
 const isPlaceholder = placeholder || !member?.name;
+const note = member?.role ?? placeholderNote ?? 'Names and roles will be added when the chapter confirms the roster';
 ---
 
-<article class:list={['team-card', { 'team-card--empty': isPlaceholder }]}>
-  {
-    isPlaceholder ? (
-      <div class="team-card__inner">
-        <div class="team-card__avatar team-card__avatar--empty" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5">
+<article class:list={['tile', isPlaceholder ? 'team-card--pending' : 'tile--glass', 'team-card']}>
+  <div class="team-card__inner">
+    {
+      isPlaceholder ? (
+        <div class="team-card__portrait team-card__portrait--empty" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="12" cy="8" r="3.4" />
             <path d="M5 19.5c1.4-3 4-4.6 7-4.6s5.6 1.6 7 4.6" />
           </svg>
         </div>
         <h3 class="team-card__name">Member profile to be added</h3>
-        <p class="team-card__role">{member?.role ?? placeholderNote ?? 'Names and roles will be added when the chapter confirms the roster'}</p>
-      </div>
-    ) : (
-      <div class="team-card__inner">
-        <ImagePlaceholder
-          image={member.image ?? null}
-          alt={`Portrait of ${member.name}`}
-          label="Portrait to be added"
-          ratio="square"
-          class="team-card__photo"
-        />
+        <p class="team-card__role">{note}</p>
+        <span class="tile__chip team-card__chip"><span>To be added</span></span>
+      ) : (
+        <div class="team-card__portrait">
+          <ImagePlaceholder
+            image={member.image ?? null}
+            alt={`Portrait of ${member.name}`}
+            label="Portrait to be added"
+            ratio="square"
+          />
+        </div>
         <h3 class="team-card__name">{member.name}</h3>
         <p class="team-card__role">{member.role}</p>
-      </div>
-    )
-  }
+      )
+    }
+  </div>
 </article>
 
 <style>
   .team-card {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
     height: 100%;
   }
 
-  .team-card--empty {
-    background: var(--bg-alt);
-    border-style: dashed;
+  .team-card--pending {
+    background: var(--tile-pending);
+    box-shadow: var(--shadow-tile-sm);
+  }
+
+  .team-card--pending::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.8),
+      inset 0 0 0 1px rgba(32, 32, 32, 0.04);
   }
 
   .team-card__inner {
     padding: var(--space-5);
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
   }
 
-  .team-card__photo {
-    margin-bottom: var(--space-3);
-    max-width: 155px;
-    margin-inline: auto;
+  .team-card__portrait {
+    width: 6.4rem;
+    margin-bottom: var(--space-4);
+  }
+
+  /* Scoped styles do not reach into child components, so target the media
+     slot globally from our own wrapper. */
+  .team-card__portrait :global(.media-slot) {
     border-radius: 50%;
     overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(213, 166, 46, 0.35), 0 12px 26px -16px rgba(32, 32, 32, 0.55);
   }
 
-  .team-card__avatar--empty {
-    width: 3.4rem;
-    height: 3.4rem;
-    margin: 0.5rem auto var(--space-4);
+  .team-card__portrait--empty {
+    width: 4.4rem;
+    height: 4.4rem;
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background: rgba(213, 166, 46, 0.12);
+    background: rgba(255, 255, 255, 0.62);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.75);
     color: var(--accent-deep);
+    margin-bottom: var(--space-4);
   }
 
   .team-card__name {
@@ -90,7 +111,7 @@ const isPlaceholder = placeholder || !member?.name;
     margin: 0 0 0.25rem;
   }
 
-  .team-card--empty .team-card__name {
+  .team-card--pending .team-card__name {
     color: var(--ink-2);
     font-weight: 600;
   }
@@ -99,5 +120,9 @@ const isPlaceholder = placeholder || !member?.name;
     color: var(--ink-2);
     font-size: 0.85rem;
     margin: 0;
+  }
+
+  .team-card__chip {
+    margin-top: var(--space-4);
   }
 </style>

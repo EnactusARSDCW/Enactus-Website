@@ -13,7 +13,6 @@
   --accent-deep: #a8821f;
   --border: #e7e5df;
   --dark: #222222;
-  --glass: rgba(255, 255, 255, 0.68);
 
   /* Type */
   --font-heading: 'DM Sans Variable', 'DM Sans', 'Segoe UI', sans-serif;
@@ -33,10 +32,20 @@
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
+  --radius-xl: 22px;
+  --radius-2xl: 28px;
 
   --shadow-sm: 0 1px 3px rgba(32, 32, 32, 0.06), 0 1px 2px rgba(32, 32, 32, 0.04);
   --shadow-md: 0 8px 24px rgba(32, 32, 32, 0.08);
   --shadow-lg: 0 16px 48px rgba(32, 32, 32, 0.12);
+
+  /* Card system (see styles/tiles.css) */
+  --tile-surface: linear-gradient(168deg, #ffffff 0%, #ffffff 44%, #f6f4ef 100%);
+  --tile-pending: radial-gradient(120% 85% at 84% 6%, rgba(213, 166, 46, 0.16) 0%, rgba(213, 166, 46, 0) 55%),
+    linear-gradient(158deg, #f8f6f1 0%, #efede7 52%, #e5e1d7 100%);
+  --shadow-tile: 0 1px 2px rgba(32, 32, 32, 0.04), 0 18px 38px -24px rgba(32, 32, 32, 0.5);
+  --shadow-tile-sm: 0 1px 2px rgba(32, 32, 32, 0.04), 0 10px 24px -18px rgba(32, 32, 32, 0.45);
+  --shadow-tile-hover: 0 2px 6px rgba(32, 32, 32, 0.06), 0 30px 60px -28px rgba(32, 32, 32, 0.55);
 
   --container: 1160px;
   --container-narrow: 720px;
@@ -293,12 +302,14 @@ main {
 
 /* ---------- Glass panel (restrained) ---------- */
 .glass-panel {
-  background: var(--glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: linear-gradient(168deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.72) 100%);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.78);
   border-radius: var(--radius-lg);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 18px 40px -24px rgba(32, 32, 32, 0.42);
 }
 
 /* ---------- Forms ---------- */

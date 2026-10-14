@@ -10,92 +10,54 @@ interface Props {
 const { slug } = Astro.props;
 const product = getProduct(slug);
 if (!product) throw new Error(`Unknown product slug: ${slug}`);
-const project = getProduct ? getProject(product.projectSlug) : undefined;
-const projectName = project ? project.name.replace(/^Project\s+/, '') : 'our projects';
+
+const project = getProject(product.projectSlug);
+const projectName = project?.name ?? 'our projects';
+const lead = product.description?.[0] ?? '';
+const price = product.price ?? 'Price on enquiry';
+const availability = product.availability ?? 'Enquire for availability';
 ---
 
-<article class="product-card">
-  <a href={`/shop/${product.slug}`} class="product-card__media-link">
+<article class="tile tile--glass product-card">
+  <div class="product-card__body">
+    <p class="tile__eyebrow">From {projectName}</p>
+    <h3 class="tile__title">{product.name}</h3>
+    {lead && <p class="tile__desc tile__desc--clamp">{lead}</p>}
+    <p class="tile__price">{price}</p>
+  </div>
+
+  <div class="product-card__media">
     <ImagePlaceholder
       image={product.image}
       alt={product.imageAlt}
       label="Product photograph to be added"
-      ratio="square"
-      class="product-card__media"
+      variant="fill"
     />
-  </a>
-  <div class="product-card__body">
-    <p class="product-card__variant">{product.availability ?? 'Enquire for availability'}</p>
-    <h3 class="product-card__name">
-      <a href={`/shop/${product.slug}`}>{product.name}</a>
-    </h3>
-    <p class="product-card__price">{product.price ?? 'Price on enquiry'}</p>
-    <p class="product-card__from">Supporting Project {projectName}</p>
+    <span class="tile__chip product-card__chip"><span>{availability}</span></span>
   </div>
+
+  <a class="tile__cover" href={`/shop/${product.slug}`} aria-label={`${product.name} — ${price}. View the product.`}></a>
 </article>
 
 <style>
-  .product-card {
-    display: flex;
-    flex-direction: column;
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    transition: box-shadow 0.25s ease, transform 0.25s ease;
-  }
-
-  .product-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
-  }
-
-  .product-card__media {
-    border: 0;
-    border-bottom: 1px solid var(--border);
-    border-radius: 0;
-  }
-
   .product-card__body {
-    padding: var(--space-4) var(--space-5) var(--space-5);
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
+    padding: var(--space-5) var(--space-5) var(--space-4);
   }
 
-  .product-card__variant {
-    font-size: 0.78rem;
-    color: var(--ink-2);
-    letter-spacing: 0.04em;
-    margin: 0;
+  /* Image fills the base of the tile so every card in a row lines up. */
+  .product-card__media {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 9.5rem;
+    aspect-ratio: 4 / 3;
+    margin-top: auto;
   }
 
-  .product-card__name {
-    font-size: 1.1rem;
-    margin: 0.1rem 0 0;
-  }
-
-  .product-card__name a {
-    color: var(--ink);
-  }
-
-  .product-card__name a:hover {
-    color: var(--accent-deep);
-  }
-
-  .product-card__price {
-    font-family: var(--font-heading);
-    font-weight: 600;
-    color: var(--accent-deep);
-    margin: 0.35rem 0 0;
-    font-size: 0.98rem;
-  }
-
-  .product-card__from {
-    margin: 0.9rem 0 0;
-    padding-top: 0.75rem;
-    border-top: 1px solid var(--border);
-    color: var(--ink-2);
-    font-size: 0.85rem;
+  .product-card__chip {
+    position: absolute;
+    z-index: 2;
+    left: 0.7rem;
+    bottom: 0.7rem;
+    max-width: calc(100% - 1.4rem);
   }
 </style>

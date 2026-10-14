@@ -1,11 +1,16 @@
 ---
 // Reusable image-slot component. Renders a real photograph when one exists,
 // otherwise a calm, labelled placeholder — never a fabricated/AI image.
+//
+// variant="framed" (default) — a bordered media box for editorial layouts.
+// variant="fill"             — edge-to-edge media that fills its parent tile,
+//                              so photographs can sit under glass panels.
 interface Props {
   image?: string | null;
   alt: string;
   label?: string;
   ratio?: 'wide' | 'tall' | 'square' | 'photo';
+  variant?: 'framed' | 'fill';
   class?: string;
   loading?: 'eager' | 'lazy';
 }
@@ -15,18 +20,29 @@ const {
   alt,
   label = 'Project photograph to be added',
   ratio = 'photo',
+  variant = 'framed',
   class: className = '',
   loading = 'lazy',
 } = Astro.props;
 
-const ratioCss =
-  ratio === 'wide' ? 'aspect-ratio: 16 / 9;' :
-  ratio === 'tall' ? 'aspect-ratio: 4 / 5;' :
-  ratio === 'square' ? 'aspect-ratio: 1 / 1;' :
-  'aspect-ratio: 3 / 2;';
+const isFill = variant === 'fill';
+
+const ratioCss = isFill
+  ? undefined
+  : ratio === 'wide'
+    ? 'aspect-ratio: 16 / 9;'
+    : ratio === 'tall'
+      ? 'aspect-ratio: 4 / 5;'
+      : ratio === 'square'
+        ? 'aspect-ratio: 1 / 1;'
+        : 'aspect-ratio: 3 / 2;';
 ---
 
-<figure class={`media-slot ${className}`} style={ratioCss} aria-label={image ? undefined : label}>
+<figure
+  class:list={['media-slot', isFill && 'media-slot--fill', className]}
+  style={ratioCss}
+  aria-label={image ? undefined : label}
+>
   {
     image ? (
       <img src={image} alt={alt} loading={loading} decoding="async" />
@@ -70,9 +86,7 @@ const ratioCss =
     justify-content: center;
     gap: 0.6rem;
     color: var(--ink-2);
-    background:
-      linear-gradient(135deg, rgba(213, 166, 46, 0.05) 0%, transparent 45%),
-      var(--bg-alt);
+    background: var(--tile-pending);
     text-align: center;
     padding: 1rem;
   }
@@ -81,5 +95,38 @@ const ratioCss =
     font-size: 0.82rem;
     max-width: 22ch;
     line-height: 1.45;
+  }
+
+  /* ---------- Fill variant: media becomes the tile surface ---------- */
+  figure.media-slot--fill {
+    height: 100%;
+    min-height: 100%;
+    border: 0;
+    border-radius: 0;
+    background: var(--tile-pending);
+  }
+
+  .media-slot--fill .media-slot__placeholder {
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding: 1.15rem 1.25rem;
+    text-align: left;
+    color: rgba(32, 32, 32, 0.55);
+    background: transparent;
+  }
+
+  .media-slot--fill .media-slot__placeholder svg {
+    opacity: 0.65;
+  }
+
+  .media-slot--fill .media-slot__placeholder span {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    max-width: 16ch;
+    line-height: 1.4;
   }
 </style>

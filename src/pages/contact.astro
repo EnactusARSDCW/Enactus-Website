@@ -109,14 +109,18 @@ const socialIcons = [
   }
 
   .info-card {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-5);
+    background: var(--tile-surface);
+    border: 0;
+    border-radius: var(--radius-xl);
+    padding: var(--space-5) var(--space-6);
+    box-shadow:
+      var(--shadow-tile-sm),
+      inset 0 1px 0 rgba(255, 255, 255, 0.95),
+      inset 0 0 0 1px rgba(32, 32, 32, 0.055);
   }
 
   .info-card--soft {
-    background: var(--bg-alt);
+    background: var(--tile-pending);
   }
 
   .info-card h3 {

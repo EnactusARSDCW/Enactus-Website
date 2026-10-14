@@ -38,7 +38,7 @@ const featuredStories = stories.slice(0, 2);
           label="Featured chapter photograph to be added"
           ratio="photo"
         />
-        <div class="glass-panel hero-card">
+        <div class="hero-card tile__panel tile__panel--smoke">
           <p class="hero-card__label">Currently running</p>
           <ul>
             <li><a href="/projects/kalakaari">Project Kalakaari</a> — livelihoods with artisan communities</li>
@@ -114,7 +114,7 @@ const featuredStories = stories.slice(0, 2);
             </li>
           </ol>
         </div>
-        <aside class="impact-aside">
+        <aside class="impact-aside glass-panel">
           <h3>Impact so far — as reported by the chapter</h3>
           <ul class="impact-list">
             <li>
@@ -230,7 +230,7 @@ const featuredStories = stories.slice(0, 2);
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--accent-deep);
+    color: var(--accent);
     margin: 0 0 0.5rem;
   }
 
@@ -243,13 +243,19 @@ const featuredStories = stories.slice(0, 2);
     font-size: 0.92rem;
   }
 
+  .hero-card ul {
+    color: rgba(255, 255, 255, 0.82);
+  }
+
   .hero-card a {
     font-weight: 600;
-    color: var(--ink);
+    color: #fff;
   }
 
   .hero-card a:hover {
-    color: var(--accent-deep);
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   /* Introduction */
@@ -289,18 +295,8 @@ const featuredStories = stories.slice(0, 2);
     margin-top: var(--space-5);
   }
 
-  .featured-grid--single :global(.project-card) {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: stretch;
-  }
-
   @media (max-width: 920px) {
     .featured-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .featured-grid--single :global(.project-card) {
       grid-template-columns: 1fr;
     }
   }
@@ -343,10 +339,12 @@ const featuredStories = stories.slice(0, 2);
   }
 
   .impact-aside {
-    background: var(--bg-alt);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     padding: var(--space-6);
+  }
+
+  .impact-aside .impact-list li:first-child {
+    border-top-color: transparent;
   }
 
   .impact-aside h3 {
