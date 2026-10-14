@@ -1,0 +1,142 @@
+---
+import { site } from '../data/site';
+
+interface Props {
+  id?: string;
+  showSubjectChoices?: boolean;
+}
+
+const { id = 'contact-form', showSubjectChoices = false } = Astro.props;
+---
+
+<p class="form-note">
+  {showSubjectChoices
+    ? 'Fill in your enquiry below — when you submit, we hand the message to your own email app addressed to the chapter. Nothing is stored on this site yet.'
+    : 'This form is a frontend placeholder for an upcoming application workflow — submitting it does not save anything yet. For now it hands your message to your own email app.'}
+</p>
+
+<form id={id} class="enquiry-form" novalidate>
+  <div class="form-row">
+    <div class="field">
+      <label for={`${id}-name`}>Full name <span aria-hidden="true">*</span></label>
+      <input id={`${id}-name`} name="name" type="text" autocomplete="name" required />
+      <p class="error">Please enter your name.</p>
+    </div>
+    <div class="field">
+      <label for={`${id}-email`}>Email address <span aria-hidden="true">*</span></label>
+      <input id={`${id}-email`} name="email" type="email" autocomplete="email" required />
+      <p class="error">Please enter a valid email address.</p>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for={`${id}-subject`}>Subject <span aria-hidden="true">*</span></label>
+    <input id={`${id}-subject`} name="subject" type="text" required minlength="3" />
+    <p class="error">Please add a short subject.</p>
+  </div>
+
+  <div class="field">
+    <label for={`${id}-message`}>Message <span aria-hidden="true">*</span></label>
+    <textarea id={`${id}-message`} name="message" rows="6" required minlength="15"></textarea>
+    <p class="hint">
+      Include anything that helps us reply usefully — your interest area, organisation, or college if you're a
+      student.
+    </p>
+    <p class="error">Please write a message of at least 15 characters.</p>
+  </div>
+
+  <button type="submit" class="btn btn--primary">Continue to send by email</button>
+  <p class="form-footnote">
+    We never share your details. Direct email:
+    <a class="text-link" href={`mailto:${site.email}`}>{site.email}</a>
+  </p>
+</form>
+
+<style>
+  .form-note {
+    font-size: 0.86rem;
+    color: var(--ink-2);
+    background: var(--bg-alt);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.8rem 1rem;
+  }
+
+  .form-row {
+    display: grid;
+    gap: 0 var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .form-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .enquiry-form {
+    margin-top: var(--space-5);
+    text-align: left;
+  }
+
+  .enquiry-form .btn[type='submit'] {
+    margin-top: var(--space-3);
+  }
+
+  .form-footnote {
+    margin-top: var(--space-4);
+    font-size: 0.85rem;
+    color: var(--ink-2);
+  }
+</style>
+
+<script>
+  // Accessible client-side validation; on success, hand the message to the
+  // visitor's own email app. No fake backend, no fake storage.
+  const forms = document.querySelectorAll<HTMLFormElement>('form.enquiry-form');
+
+  forms.forEach((form) => {
+    const clearInvalid = (field: HTMLElement) => field.classList.remove('invalid');
+
+    form.querySelectorAll('input, textarea').forEach((el) => {
+      el.addEventListener('input', () => {
+        const field = el.closest('.field');
+        if (field instanceof HTMLElement) clearInvalid(field);
+      });
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let firstInvalid: HTMLElement | null = null;
+
+      form.querySelectorAll('input[name], textarea[name]').forEach((el) => {
+        const field = el.closest('.field');
+        if (!(field instanceof HTMLElement)) return;
+        const input = el as HTMLInputElement | HTMLTextAreaElement;
+        const valid = input.checkValidity();
+        field.classList.toggle('invalid', !valid);
+        if (!valid) {
+          if (!firstInvalid) firstInvalid = field;
+        }
+      });
+
+      if (firstInvalid) {
+        const firstControl = firstInvalid.querySelector('input, textarea');
+        if (firstControl instanceof HTMLElement) firstControl.focus();
+        return;
+      }
+
+      const data = new FormData(form);
+      const to = 'enactusarsdchapter@gmail.com';
+      const subject = encodeURIComponent(String(data.get('subject') ?? 'Website enquiry'));
+      const body = encodeURIComponent(
+        `Name: ${String(data.get('name') ?? '')}\nEmail: ${String(data.get('email') ?? '')}\n\n${String(data.get('message') ?? '')}`,
+      );
+      window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+
+      const note = form.previousElementSibling;
+      if (note instanceof HTMLElement && note.classList.contains('form-note')) {
+        note.textContent = 'Your email app should now open with the message ready to send. If it did not, write to us directly at ' + to + '.';
+      }
+    });
+  });
+</script>

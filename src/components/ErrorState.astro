@@ -1,0 +1,31 @@
+---
+interface Props {
+  title?: string;
+  message: string;
+}
+
+const { title = 'Something went wrong', message } = Astro.props;
+---
+
+<div class="error-state" role="alert">
+  <h3>{title}</h3>
+  <p>{message}</p>
+</div>
+
+<style>
+  .error-state {
+    text-align: center;
+    padding: clamp(2rem, 5vw, 3.5rem) var(--space-5);
+    background: #fdf1f0;
+    border: 1px solid #eccfcd;
+    border-radius: var(--radius-lg);
+    color: #8f3531;
+    max-width: 40rem;
+    margin: 0 auto;
+  }
+
+  .error-state p {
+    color: #8f3531;
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,186 @@
+---
+import BaseLayout from '../components/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { site } from '../data/site';
+import IconInstagram from '../components/icons/IconInstagram.astro';
+import IconLinkedIn from '../components/icons/IconLinkedIn.astro';
+import IconLink from '../components/icons/IconLink.astro';
+import IconMail from '../components/icons/IconMail.astro';
+
+const socialIcons = [
+  { icon: IconInstagram, label: 'Instagram', url: 'https://www.instagram.com/enac.arsd/' },
+  { icon: IconLinkedIn, label: 'LinkedIn', url: 'https://in.linkedin.com/company/arsdcenactus' },
+  { icon: IconLink, label: 'Linktree', url: 'https://linktr.ee/enactusarsd1' },
+];
+---
+
+<BaseLayout
+  title="Contact Us"
+  description="Contact Enactus ARSD — email the chapter, find us on campus at Atma Ram Sanatan Dharma College, or send an enquiry."
+  extraTopPad
+>
+  <div class="container">
+    <PageHero
+      kicker="Contact us"
+      title="Say hello — we mean it."
+      lede="Product enquiries, partnership ideas, recruitment questions or something else entirely — every message goes to the team's official inbox."
+    />
+  </div>
+
+  <section class="section section--flush">
+    <div class="container contact-grid">
+      <div class="contact-info">
+        <article class="info-card">
+          <h3>Email</h3>
+          <p class="big">
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+          </p>
+          <p class="muted">The chapter's official, published address — we reply as promptly as student schedules allow.</p>
+        </article>
+
+        <article class="info-card">
+          <h3>Where we are</h3>
+          <p class="big">{site.institution}</p>
+          <p class="muted">A student society of the college. Exact room and office hours are confirmed per semester by the core team.</p>
+        </article>
+
+        <article class="info-card">
+          <h3>Follow the chapter</h3>
+          <ul class="social-list">
+            {
+              socialIcons.map(({ icon: Icon, label, url }) => (
+                <li>
+                  <a href={url} rel="me noopener" target="_blank">
+                    <Icon />
+                    <span>{label}</span>
+                    <span class="handle" aria-hidden="true">↗</span>
+                  </a>
+                </li>
+              ))
+            }
+            <li>
+              <a href={`mailto:${site.email}`}>
+                <IconMail />
+                <span>Write to us directly</span>
+                <span class="handle" aria-hidden="true">✉</span>
+              </a>
+            </li>
+          </ul>
+        </article>
+
+        <article class="info-card info-card--soft">
+          <h3>A note on accuracy</h3>
+          <p class="muted">
+            We list only contact details the chapter has published itself. If something on this page looks out of
+            date, tell us and we'll correct it.
+          </p>
+        </article>
+      </div>
+
+      <div class="contact-form-col">
+        <h2>Send an enquiry</h2>
+        <ContactForm showSubjectChoices />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .section--flush {
+    padding-top: 0;
+  }
+
+  .contact-grid {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  @media (min-width: 980px) {
+    .contact-grid {
+      grid-template-columns: 1fr 1.15fr;
+      align-items: start;
+    }
+  }
+
+  .contact-info {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .info-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+  }
+
+  .info-card--soft {
+    background: var(--bg-alt);
+  }
+
+  .info-card h3 {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    margin-bottom: var(--space-3);
+  }
+
+  .info-card .big {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: var(--space-2);
+  }
+
+  .info-card .big a {
+    color: var(--ink);
+  }
+
+  .info-card .big a:hover {
+    color: var(--accent-deep);
+  }
+
+  .muted {
+    color: var(--ink-2);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .social-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .social-list a {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--ink);
+    font-weight: 500;
+    padding: 0.4rem 0;
+  }
+
+  .social-list a:hover :global(svg) {
+    color: var(--accent-deep);
+  }
+
+  .social-list :global(svg) {
+    color: var(--ink-2);
+    transition: color 0.2s ease;
+  }
+
+  .social-list .handle {
+    margin-left: auto;
+    color: var(--ink-2);
+    font-size: 0.9rem;
+  }
+
+  .contact-form-col h2 {
+    margin-bottom: var(--space-3);
+  }
+</style>

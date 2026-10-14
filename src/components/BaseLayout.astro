@@ -1,0 +1,64 @@
+---
+import '../styles/global.css';
+import '@fontsource-variable/dm-sans';
+import '@fontsource-variable/inter';
+import SiteHeader from './SiteHeader.astro';
+import SiteFooter from './SiteFooter.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Show the whitespace above main content for non-hero pages. */
+  extraTopPad?: boolean;
+}
+
+const { title, description = site.description, extraTopPad = false } = Astro.props;
+const pageTitle = title === 'Home' ? `${site.name} — ${site.tagline}` : `${title} — ${site.name}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={site.name} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={Astro.url} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <SiteHeader />
+    <main id="main" style={extraTopPad ? 'padding-top: var(--header-h);' : undefined}>
+      <slot />
+    </main>
+    <SiteFooter />
+
+    <script>
+      // Reduced motion / lightweight page-entry fade, on a single class.
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('anim-ok');
+      }
+    </script>
+  </body>
+</html>
+
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  main {
+    flex: 1;
+  }
+</style>

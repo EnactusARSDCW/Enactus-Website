@@ -1,0 +1,166 @@
+---
+import BaseLayout from '../../components/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import StoryCard from '../../components/StoryCard.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import GetInvolvedCTA from '../../components/GetInvolvedCTA.astro';
+import { stories } from '../../data/stories';
+
+const sorted = [...stories].sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
+const featured = sorted[0];
+const rest = sorted.slice(1);
+const categories = [...new Set(stories.map((s) => s.category))];
+
+const fmt = (d: string | null) =>
+  d ? new Date(d + 'T00:00:00').toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }) : 'Date to be confirmed';
+---
+
+<BaseLayout
+  title="Stories"
+  description="Field notes, competition reports and event recaps from Enactus ARSD — written from the chapter's own updates."
+  extraTopPad
+>
+  <div class="container">
+    <PageHero
+      kicker="Stories"
+      title="Written from the chapter, not about it."
+      lede="Competition reports, grant announcements and event recaps — drawn from the chapter's own updates between 2020 and 2023."
+    />
+  </div>
+
+  {
+    featured && (
+      <section class="section section--flush">
+        <div class="container feature-wrap">
+          <p class="kicker">Featured story</p>
+          <article class="feature">
+            <a href={`/stories/${featured.slug}`}>
+              <h2>{featured.title}</h2>
+            </a>
+            <p class="meta">
+              <strong>{featured.category}</strong>
+              <span aria-hidden="true">·</span>
+              {fmt(featured.date)}
+            </p>
+            <p class="excerpt">{featured.excerpt}</p>
+            <a class="btn btn--ghost" href={`/stories/${featured.slug}`}>Read the story</a>
+          </article>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section section--alt">
+    <div class="container">
+      <div class="list-head">
+        <p class="kicker">All stories</p>
+        <p class="list-note">
+          Categories on file: {categories.map((c, i) => (
+          <>
+            {i > 0 && ' · '}
+            <span>{c}</span>
+          </>
+        ))}
+        </p>
+      </div>
+      {
+        rest.length > 0 ? (
+          <div class="story-grid">
+            {rest.map((s) => (
+              <StoryCard slug={s.slug} />
+            ))}
+          </div>
+        ) : (
+          <EmptyState title="More stories coming soon" message="This archive grows with the chapter's projects." actionUrl="/projects" actionLabel="Explore projects" />
+        )
+      }
+    </div>
+  </section>
+
+  <GetInvolvedCTA
+    title="Have a story from the field?"
+    body="Members and community partners can pitch stories for this archive. Write to the team with what you saw and what it meant."
+    primaryLabel="Contact us"
+    primaryUrl="/contact"
+    secondaryLabel="Our projects"
+    secondaryUrl="/projects"
+  />
+</BaseLayout>
+
+<style>
+  .section--flush {
+    padding-top: 0;
+  }
+
+  .feature {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    max-width: 46rem;
+  }
+
+  .feature h2 {
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    margin-bottom: var(--space-3);
+  }
+
+  .feature h2 a {
+    color: var(--ink);
+  }
+
+  .feature h2 a:hover {
+    color: var(--accent-deep);
+  }
+
+  .meta {
+    color: var(--ink-2);
+    font-size: 0.88rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .meta strong {
+    color: var(--accent-deep);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.78rem;
+  }
+
+  .excerpt {
+    color: var(--ink-2);
+    margin: var(--space-3) 0 var(--space-5);
+  }
+
+  .list-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+  }
+
+  .list-note {
+    color: var(--ink-2);
+    font-size: 0.85rem;
+  }
+
+  .list-note span {
+    color: var(--accent-deep);
+    font-weight: 500;
+  }
+
+  .story-grid {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 880px) {
+    .story-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

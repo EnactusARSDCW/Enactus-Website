@@ -1,0 +1,37 @@
+---
+interface Props {
+  kicker?: string;
+  title: string;
+  lede?: string;
+  align?: 'start' | 'center';
+}
+
+const { kicker, title, lede, align = 'start' } = Astro.props;
+---
+
+<div class:list={['section-heading', `section-heading--${align}`]}>
+  {kicker && <p class="kicker">{kicker}</p>}
+  <h2>{title}</h2>
+  {lede && <p class="lede">{lede}</p>}
+  <slot />
+</div>
+
+<style>
+  .section-heading {
+    max-width: 52rem;
+    margin-bottom: var(--space-6);
+  }
+
+  .section-heading--center {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .section-heading--center .kicker {
+    justify-content: center;
+  }
+
+  .section-heading:last-child {
+    margin-bottom: 0;
+  }
+</style>

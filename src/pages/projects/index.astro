@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../../components/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import GetInvolvedCTA from '../../components/GetInvolvedCTA.astro';
+import { projects } from '../../data/projects';
+
+const featured = projects.filter((p) => p.featured);
+const rest = projects.filter((p) => !p.featured);
+const categories = [...new Set(projects.map((p) => p.category))];
+---
+
+<BaseLayout
+  title="Projects"
+  description="Explore the community ventures of Enactus ARSD — Kalakaari, Srijan, Samvedna and Niramaya — entrepreneurial responses built with real communities."
+  extraTopPad
+>
+  <div class="container">
+    <PageHero
+      kicker="Projects"
+      title="Ventures built with communities, not just for them."
+      lede="Each project starts from a real challenge identified with real people. Today the chapter runs four: livelihoods for artisans, gardeners and potters, community care, and pandemic-era health education."
+    />
+  </div>
+
+  <!-- Featured project, wide -->
+  <section class="section section--flush">
+    <div class="container">
+      <div class="featured-wrap">
+        <ProjectCard slug={featured[0].slug} variant="featured" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Rest of the projects -->
+  <section class="section section--alt">
+    <div class="container">
+      <p class="kicker">Also running</p>
+      <div class="grid">
+        {featured.slice(1).map((p) => <ProjectCard slug={p.slug} />)}
+        {rest.map((p) => <ProjectCard slug={p.slug} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories note -->
+  <section class="section">
+    <div class="container cat-note">
+      <h2>Areas of work</h2>
+      <p>
+        Our projects currently sit across {categories.length} areas —{' '}
+        {categories.map((c, i) => (
+          <>
+            <strong>{c}</strong>
+            {i < categories.length - 2 ? ', ' : i === categories.length - 2 ? ' and ' : ''}
+          </>
+        ))}. We organise the directory by project rather than category, because most ventures touch more than one
+        issue at once.
+      </p>
+      <p class="muted">
+        Ready to collaborate on a project, propose a new one, or join as a student?{' '}
+        <a class="text-link" href="/join-us">Join us</a> or <a class="text-link" href="/partners">see partner options</a>.
+      </p>
+    </div>
+  </section>
+
+  <GetInvolvedCTA
+    title="Start something with us"
+    primaryLabel="Join the team"
+    primaryUrl="/join-us"
+    secondaryLabel="Partner with us"
+    secondaryUrl="/partners"
+  />
+</BaseLayout>
+
+<style>
+  .section--flush :global(.section) {
+    padding-top: 0;
+  }
+
+  .featured-wrap :global(.project-card--featured) {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+  }
+
+  @media (max-width: 920px) {
+    .featured-wrap :global(.project-card--featured) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .grid {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 920px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cat-note {
+    max-width: 46rem;
+  }
+
+  .cat-note strong {
+    color: var(--accent-deep);
+  }
+
+  .muted {
+    color: var(--ink-2);
+  }
+</style>

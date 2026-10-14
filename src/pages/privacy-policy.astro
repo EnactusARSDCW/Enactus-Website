@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../components/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../data/site';
+const updated = 'October 2026';
+---
+
+<BaseLayout title="Privacy Policy" description={`How ${site.name} handles information on this website.`} extraTopPad>
+  <div class="container">
+    <PageHero kicker="Legal" title="Privacy policy" lede={`Plainly stated, updated ${updated}.`} />
+  </div>
+
+  <article class="section">
+    <div class="container-narrow legal">
+      <h2>What this site does not do</h2>
+      <ul>
+        <li>No accounts, logins, or membership records on this website.</li>
+        <li>No hidden analytics, ad trackers or fingerprinting scripts.</li>
+        <li>No data sold, shared or cross-tracked to third parties.</li>
+      </ul>
+
+      <h2>Forms on this site</h2>
+      <p>
+        Our contact and join-us forms are currently frontend placeholders. They do not transmit or store anything on
+        this website — when you submit one, it composes a message in your own email app for you to review and send
+        to <a href={`mailto:${site.email}`}>{site.email}</a>. Your name, email address and message go to the chapter
+        only if you send that email.
+      </p>
+
+      <h2>Email correspondence</h2>
+      <p>
+        If you email the chapter, your message is seen by the core team to respond to your enquiry. Messages are kept
+        no longer than needed to handle the follow-up. Ask us by email if you would like correspondence removed.
+      </p>
+
+      <h2>External links</h2>
+      <p>
+        The site links to Instagram, LinkedIn and our Linktree. These platforms (not this website) apply their own
+        privacy practices and handle accounts you choose to follow from here.
+      </p>
+
+      <h2>Cookies</h2>
+      <p>
+        This website sets no tracking or analytics cookies of its own. Browser settings or platform-level
+        infrastructure (such as hosting) may retain standard technical logs, governed by the hosting provider.
+      </p>
+
+      <h2>Changes & contact</h2>
+      <p>
+        This policy is updated alongside site features — most recently {updated}. Questions about privacy:{' '}
+        <a href={`mailto:${site.email}`}>{site.email}</a>.
+      </p>
+
+      <p class="related-pages">
+        Also read: <a class="text-link" href="/terms">Terms of use</a>
+      </p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .legal {
+    font-size: 1rem;
+    color: var(--ink-2);
+  }
+
+  .legal h2 {
+    color: var(--ink);
+    margin-top: var(--space-6);
+    font-size: 1.2rem;
+  }
+
+  .legal ul {
+    display: grid;
+    gap: 0.5rem;
+    padding-left: 1.3rem;
+  }
+
+  .legal li::marker {
+    color: var(--accent-deep);
+  }
+
+  .legal a {
+    color: var(--accent-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .related-pages {
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-4);
+    margin-top: var(--space-7);
+  }
+</style>

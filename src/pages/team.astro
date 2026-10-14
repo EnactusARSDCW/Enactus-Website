@@ -1,0 +1,128 @@
+---
+import BaseLayout from '../components/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import TeamMemberCard from '../components/TeamMemberCard.astro';
+import GetInvolvedCTA from '../components/GetInvolvedCTA.astro';
+import { partitions, affiliations } from '../data/team';
+import { site } from '../data/site';
+
+const emptySlots = 3;
+---
+
+<BaseLayout
+  title="Our Team"
+  description="The people behind Enactus ARSD — leadership, project teams and operations across the chapter of ARSD College."
+  extraTopPad
+>
+  <div class="container">
+    <PageHero
+      kicker="Our team"
+      title="Students who run the chapter, day by day."
+      lede="Everything here — every product sold and every field visit — happens because students coordinate it in and around their coursework. The current core team was announced on our channels in October 2024."
+    />
+  </div>
+
+  <section class="section section--flush">
+    <div class="container">
+      <p class="roster-note">
+        The default state of this page is honest: the chapter has not published its full roster yet. When the team
+        supplies names, roles and photographs, they appear here exactly as provided.
+      </p>
+      {
+        partitions.map((part, i) => (
+          <div class:list={['partition', i > 0 && 'partition--spaced']}>
+            <SectionHeading
+              kicker={i === 0 ? 'Structure' : undefined}
+              title={part.name}
+              lede={part.description}
+            />
+            <div class="members-grid">
+              {part.members.length > 0 ? (
+                part.members.map((m) => <TeamMemberCard member={m} />)
+              ) : (
+                Array.from({ length: emptySlots }).map(() => <TeamMemberCard placeholder placeholderNote={`${part.name} roster to be added`} />)
+              )}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <SectionHeading kicker="Context" title="Where the team sits" lede="A student society, inside a global organisation." align="start" />
+      <div class="affiliate-list">
+        {affiliations.map((a) => (
+          <div class="affiliate">
+            <h3>{a.name}</h3>
+            <p>{a.relationship}</p>
+          </div>
+        ))}
+      </div>
+      <p class="roster-contact">
+        To confirm roster details for this page, contact the core team at{' '}
+        <a class="text-link" href={`mailto:${site.email}`}>{site.email}</a>.
+      </p>
+    </div>
+  </section>
+
+  <GetInvolvedCTA title="Your name could be on this page" primaryLabel="Join Us" primaryUrl="/join-us" secondaryLabel="Contact the team" secondaryUrl="/contact" />
+</BaseLayout>
+
+<style>
+  .section--flush {
+    padding-top: 0;
+  }
+
+  .roster-note {
+    background: var(--bg-alt);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-4) var(--space-5);
+    color: var(--ink-2);
+    font-size: 0.92rem;
+    max-width: 50rem;
+  }
+
+  .partition--spaced {
+    margin-top: var(--space-7);
+  }
+
+  .members-grid {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  }
+
+  .affiliate-list {
+    display: grid;
+    gap: var(--space-4);
+    max-width: 46rem;
+  }
+
+  .affiliate {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+  }
+
+  .affiliate h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .affiliate p {
+    color: var(--ink-2);
+    margin: 0;
+    font-size: 0.94rem;
+  }
+
+  .roster-contact {
+    margin-top: var(--space-5);
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+</style>

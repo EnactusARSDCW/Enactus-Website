@@ -1,0 +1,132 @@
+---
+import ImagePlaceholder from './ImagePlaceholder.astro';
+import { getStory } from '../data/stories';
+
+interface Props {
+  slug: string;
+  featured?: boolean;
+}
+
+const { slug, featured = false } = Astro.props;
+const story = getStory(slug);
+if (!story) throw new Error(`Unknown story slug: ${slug}`);
+
+const dateLabel = story.date
+  ? new Date(story.date + 'T00:00:00').toLocaleDateString('en-IN', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : 'Date to be confirmed';
+---
+
+<article class:list={['story-card', { 'story-card--featured': featured }]}>
+  <a href={`/stories/${story.slug}`} class="story-card__media-link">
+    <ImagePlaceholder
+      image={story.image}
+      alt={story.imageAlt}
+      label="Story photograph to be added"
+      ratio={featured ? 'wide' : 'photo'}
+      class="story-card__media"
+    />
+  </a>
+  <div class="story-card__body">
+    <p class="story-card__meta">
+      <span class="story-card__category">{story.category}</span>
+      <span aria-hidden="true">·</span>
+      <time datetime={story.date ?? undefined}>{dateLabel}</time>
+    </p>
+    <h3 class:list={['story-card__title', { 'story-card__title--lg': featured }]}>
+      <a href={`/stories/${story.slug}`}>{story.title}</a>
+    </h3>
+    <p class="story-card__excerpt">{story.excerpt}</p>
+    <a class="read-more" href={`/stories/${story.slug}`}>Read the story <span aria-hidden="true">→</span></a>
+  </div>
+</article>
+
+<style>
+  .story-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .story-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .story-card__media {
+    border: 0;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+  }
+
+  .story-card__body {
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .story-card__meta {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--ink-2);
+    margin: 0 0 0.6rem;
+  }
+
+  .story-card__category {
+    color: var(--accent-deep);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.72rem;
+  }
+
+  .story-card__title {
+    font-size: 1.15rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .story-card__title--lg {
+    font-size: 1.45rem;
+  }
+
+  .story-card__title a {
+    color: var(--ink);
+  }
+
+  .story-card__title a:hover {
+    color: var(--accent-deep);
+  }
+
+  .story-card__excerpt {
+    color: var(--ink-2);
+    font-size: 0.93rem;
+    margin: 0;
+    flex: 1;
+  }
+
+  .read-more {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--accent-deep);
+    margin-top: var(--space-4);
+  }
+
+  .read-more:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    color: var(--accent-deep);
+  }
+</style>

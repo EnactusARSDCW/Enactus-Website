@@ -1,0 +1,55 @@
+---
+interface Props {
+  title: string;
+  message: string;
+  actionLabel?: string;
+  actionUrl?: string;
+}
+
+const { title, message, actionLabel, actionUrl } = Astro.props;
+---
+
+<div class="empty-state">
+  <div class="empty-state__icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M8 10h8M9.5 14.5c.8.6 1.7 1 2.5 1 1.4 0 2.6-.9 2.6-2" />
+    </svg>
+  </div>
+  <h3>{title}</h3>
+  <p>{message}</p>
+  {actionUrl && actionLabel && <a class="btn btn--ghost" href={actionUrl}>{actionLabel}</a>}
+</div>
+
+<style>
+  .empty-state {
+    text-align: center;
+    padding: clamp(2.5rem, 6vw, 4rem) var(--space-5);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-alt);
+    max-width: 40rem;
+    margin: 0 auto;
+  }
+
+  .empty-state__icon {
+    width: 3rem;
+    height: 3rem;
+    margin: 0 auto var(--space-4);
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(213, 166, 46, 0.12);
+    color: var(--accent-deep);
+  }
+
+  .empty-state p {
+    color: var(--ink-2);
+    max-width: 36rem;
+    margin-inline: auto;
+  }
+
+  .empty-state .btn {
+    margin-top: var(--space-4);
+  }
+</style>

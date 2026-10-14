@@ -1,0 +1,445 @@
+---
+import BaseLayout from '../components/BaseLayout.astro';
+import { site } from '../data/site';
+import { projects } from '../data/projects';
+import { products } from '../data/products';
+import { stories } from '../data/stories';
+import ProjectCard from '../components/ProjectCard.astro';
+import ProductCard from '../components/ProductCard.astro';
+import StoryCard from '../components/StoryCard.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ImagePlaceholder from '../components/ImagePlaceholder.astro';
+
+const featuredProjects = projects.filter((p) => p.featured);
+const shopPreview = products.slice(0, 2);
+const featuredStories = stories.slice(0, 2);
+---
+
+<BaseLayout title="Home">
+  <!-- 1 · Hero -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="kicker">Enactus ARSD · Atma Ram Sanatan Dharma College</p>
+        <h1>Entrepreneurial action that puts people first.</h1>
+        <p class="lede">
+          We are the student-led Enactus chapter of ARSD College, University of Delhi — working with artisans,
+          gardeners and communities around our campus to build livelihoods, dignity and well-being.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn--accent" href="/projects">Explore our projects</a>
+          <a class="btn btn--ghost" href="/about">About the chapter</a>
+        </div>
+      </div>
+      <div class="hero-media">
+        <ImagePlaceholder
+          image={null}
+          alt="Enactus ARSD members during a community field visit. A genuine team photograph will replace this placeholder."
+          label="Featured chapter photograph to be added"
+          ratio="photo"
+        />
+        <div class="glass-panel hero-card">
+          <p class="hero-card__label">Currently running</p>
+          <ul>
+            <li><a href="/projects/kalakaari">Project Kalakaari</a> — livelihoods with artisan communities</li>
+            <li><a href="/projects/srijan">Project Srijan</a> — gardeners &amp; potters to market</li>
+            <li><a href="/projects/samvedna">Project Samvedna</a> — support &amp; mental-health awareness</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · Introduction -->
+  <section class="section intro">
+    <div class="container editorial-split">
+      <div>
+        <p class="kicker">Who we are</p>
+        <h2>A student team, working with real communities.</h2>
+        <p>
+          Enactus ARSD is part of the global Enactus network — student teams that use entrepreneurial action to
+          address social challenges. Ours is the chapter of Atma Ram Sanatan Dharma College, University of Delhi.
+        </p>
+        <p>
+          Our work starts by listening to the people around us: artisans with skills but few buyers, gardeners and
+          potters without a market, and neighbours whose mental well-being is too often overlooked. Then we build
+          entrepreneurial responses together with them — not for them.
+        </p>
+        <a class="btn btn--dark" href="/about">Read more about us</a>
+      </div>
+      <ImagePlaceholder
+        image={null}
+        alt="Enactus ARSD team at work on campus. Photograph to be added."
+        label="Team photograph to be added"
+        ratio="tall"
+      />
+    </div>
+  </section>
+
+  <!-- 3 · Featured projects -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="heading-row">
+        <SectionHeading kicker="Our work" title="Featured projects" lede="Four continuing ventures, each built around the people it serves." />
+        <a class="btn btn--ghost heading-row__cta" href="/projects">All projects</a>
+      </div>
+      <div class="featured-grid">
+        {featuredProjects.map((p) => <ProjectCard slug={p.slug} />)}
+      </div>
+      <div class="featured-grid featured-grid--single">
+        <ProjectCard slug="niramaya" variant="featured" />
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · Approach and impact -->
+  <section class="section">
+    <div class="container">
+      <div class="editorial-split">
+        <div>
+          <p class="kicker">Our approach</p>
+          <h2>Listen, build, measure, repeat.</h2>
+          <ol class="approach-list">
+            <li>
+              <h3>Identify the challenge</h3>
+              <p>We spend time with a community before designing anything, understanding the problem from their perspective.</p>
+            </li>
+            <li>
+              <h3>Build an entrepreneurial response</h3>
+              <p>Together with the community we design a venture — a product, a service, a route to market — that can sustain itself.</p>
+            </li>
+            <li>
+              <h3>Work alongside people</h3>
+              <p>Students coordinate, but the makers and participants are the centre of every project.</p>
+            </li>
+          </ol>
+        </div>
+        <aside class="impact-aside">
+          <h3>Impact so far — as reported by the chapter</h3>
+          <ul class="impact-list">
+            <li>
+              <strong>20+ women</strong>
+              <p>empowered through sustainable employment via Project Kalakaari (2020 chapter report).</p>
+              <a class="text-link" href="https://enactusarsdchapter.wixsite.com/enactus-arsd/post/kpmg-grant" rel="noopener" target="_blank">Source</a>
+            </li>
+            <li>
+              <strong>₹50,000 grant</strong>
+              <p>received under the KPMG Business Ethics Grant in 2020, supporting Kalakaari and Srijan.</p>
+              <a class="text-link" href="https://enactusarsdchapter.wixsite.com/enactus-arsd/post/kpmg-grant" rel="noopener" target="_blank">Source</a>
+            </li>
+            <li>
+              <strong>Nationals 2022</strong>
+              <p>the chapter competed with Samvedna and Srijan and won the “Most Voted Entry” category.</p>
+              <a class="text-link" href="https://enactusarsdchapter.wixsite.com/enactus-arsd/post/enactus-nationals-2022" rel="noopener" target="_blank">Source</a>
+            </li>
+          </ul>
+          <p class="impact-note">We publish only claims the chapter itself has reported publicly. Fresh numbers will be added as projects report them.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · Shop preview -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="heading-row">
+        <SectionHeading kicker="From our projects" title="Products with a purpose" lede="Every purchase supports the makers behind it." />
+        <a class="btn btn--ghost heading-row__cta" href="/shop">Visit the shop</a>
+      </div>
+      <div class="shop-grid">
+        {shopPreview.map((p) => <ProductCard slug={p.slug} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · Stories -->
+  <section class="section">
+    <div class="container">
+      <div class="heading-row">
+        <SectionHeading kicker="Stories" title="From the field and the campus" />
+        <a class="btn btn--ghost heading-row__cta" href="/stories">All stories</a>
+      </div>
+      <div class="featured-grid">
+        {featuredStories.map((s) => <StoryCard slug={s.slug} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · Get involved -->
+  <section class="section section--dark involve">
+    <div class="container involve-inner">
+      <div>
+        <h2>Ways to get involved</h2>
+        <ul class="ways-list">
+          <li><strong>Students</strong> — join the team through our recruitment rounds. <a href="/join-us">Join us →</a></li>
+          <li><strong>Partners</strong> — collaborate or sponsor a project. <a href="/partners">See our partners →</a></li>
+          <li><strong>Everyone</strong> — buy a product with a purpose or simply say hello. <a href="/contact">Contact us →</a></li>
+        </ul>
+      </div>
+      <div class="involve-actions">
+        <a class="btn btn--accent" href="/join-us">Join Us</a>
+        <a class="btn btn--ghost-on-dark" href="/contact">Contact us</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Hero */
+  .hero {
+    padding-block: clamp(3.5rem, 9vw, 7rem) clamp(3rem, 7vw, 6rem);
+  }
+
+  .hero-grid {
+    display: grid;
+    gap: clamp(2rem, 5vw, 3.5rem);
+    align-items: center;
+    position: relative;
+  }
+
+  @media (min-width: 960px) {
+    .hero-grid {
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+  }
+
+  .hero-copy .lede {
+    margin-bottom: var(--space-5);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .hero-media {
+    position: relative;
+  }
+
+  .hero-card {
+    position: relative;
+    margin-top: calc(-1 * var(--space-6));
+    margin-inline: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+  }
+
+  .hero-card__label {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    margin: 0 0 0.5rem;
+  }
+
+  .hero-card ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.92rem;
+  }
+
+  .hero-card a {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .hero-card a:hover {
+    color: var(--accent-deep);
+  }
+
+  /* Introduction */
+  .intro .btn--dark {
+    background: var(--dark);
+    color: #fff;
+  }
+
+  .intro .btn--dark:hover {
+    background: #3a3a3a;
+    color: #fff;
+  }
+
+  /* Heading rows with CTA */
+  .heading-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .heading-row :global(.section-heading) {
+    margin-bottom: 0;
+  }
+
+  /* Project grids — deliberate asymmetry, not uniform 3-col cards */
+  .featured-grid {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .featured-grid--single {
+    grid-template-columns: 1fr;
+    margin-top: var(--space-5);
+  }
+
+  .featured-grid--single :global(.project-card) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+  }
+
+  @media (max-width: 920px) {
+    .featured-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .featured-grid--single :global(.project-card) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Approach + impact */
+  .approach-list {
+    list-style: none;
+    counter-reset: step;
+    margin: var(--space-5) 0 0;
+    padding: 0;
+  }
+
+  .approach-list li {
+    counter-increment: step;
+    padding: var(--space-4) 0 var(--space-4) 3.2rem;
+    border-top: 1px solid var(--border);
+    position: relative;
+  }
+
+  .approach-list li::before {
+    content: counter(step, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: var(--space-4);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 1rem;
+  }
+
+  .approach-list h3 {
+    margin-bottom: 0.35rem;
+    font-size: 1.05rem;
+  }
+
+  .approach-list p {
+    color: var(--ink-2);
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .impact-aside {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+  }
+
+  .impact-aside h3 {
+    font-size: 1.05rem;
+  }
+
+  .impact-list {
+    list-style: none;
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .impact-list li {
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-4);
+  }
+
+  .impact-list strong {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    color: var(--ink);
+  }
+
+  .impact-list p {
+    display: inline;
+    margin: 0 0 0 0.4rem;
+    color: var(--ink-2);
+    font-size: 0.93rem;
+  }
+
+  .impact-list .text-link {
+    display: inline-block;
+    font-size: 0.82rem;
+    margin-top: 0.3rem;
+  }
+
+  .impact-note {
+    margin-top: var(--space-5);
+    font-size: 0.8rem;
+    color: var(--ink-2);
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-3);
+  }
+
+  /* Shop preview */
+  .shop-grid {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 760px) {
+    .shop-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Get involved band */
+  .involve-inner {
+    display: grid;
+    gap: var(--space-6);
+    align-items: center;
+  }
+
+  @media (min-width: 860px) {
+    .involve-inner {
+      grid-template-columns: 1.3fr 1fr;
+    }
+
+    .involve-actions {
+      justify-self: end;
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+  }
+
+  .ways-list {
+    list-style: none;
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .ways-list a {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .ways-list a:hover {
+    color: #e3b53d;
+  }
+</style>

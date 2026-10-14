@@ -1,0 +1,164 @@
+---
+import BaseLayout from '../components/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import PartnerLogo from '../components/PartnerLogo.astro';
+import GetInvolvedCTA from '../components/GetInvolvedCTA.astro';
+import { partners, partnerSlots } from '../data/partners';
+import { site } from '../data/site';
+---
+
+<BaseLayout
+  title="Partners"
+  description="The partners and supporters of Enactus ARSD — institutional affiliations, grant supporters and community collaborators."
+  extraTopPad
+>
+  <div class="container">
+    <PageHero
+      kicker="Partners"
+      title="Work that no team does alone."
+      lede="Our projects stand on institutional support, grant funding and community collaborators. This page lists verified relationships only — nothing is implied that has not happened."
+    />
+  </div>
+
+  <section class="section section--flush">
+    <div class="container">
+      <SectionHeading kicker="Confirmed" title="Our partners" lede="Organisations and institutions with a documented relationship to the chapter." />
+      <div class="partner-grid">
+        {partners.map((p) => <PartnerLogo partner={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <SectionHeading
+        kicker="Being added"
+        title="Relationships we are documenting"
+        lede="These collaborations are part of our published history and recent work; approved logo artwork and exact partner profiles are being confirmed now."
+      />
+      <ul class="slot-list">
+        {partnerSlots.map((s) => <li><span class="slot-card">{s}<em class="slot-note">Body and logo to be confirmed</em></span></li>)}
+      </ul>
+      <p class="slot-legal">
+        Partner names appear here only where the chapter itself has reported the relationship (for example, the
+        2020 KPMG Business Ethics Grant post). To confirm or update partner details,{' '}
+        <a class="text-link" href={`mailto:${site.email}?subject=Partner%20listing`}>write to the team</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container collab">
+      <div>
+        <p class="kicker">Collaboration models</p>
+        <h2>Ways organisations work with us</h2>
+        <ul class="collab-list">
+          <li><strong>Community partners</strong> — foundations, shelters and neighbourhood groups our members work alongside.</li>
+          <li><strong>Grant supporters</strong> — organisations that fund a specific project or phase.</li>
+          <li><strong>Materials & logistics partners</strong> — suppliers helping maker communities reach buyers.</li>
+          <li><strong>Speakers & mentors</strong> — practitioners who share honest journeys at our events, like ENAC-TALK.</li>
+        </ul>
+      </div>
+      <div class="collab-cta glass-panel">
+        <h3>Start a conversation</h3>
+        <p>Tell us about your organisation and what you would like to support.</p>
+        <a class="btn btn--accent" href="/contact">Contact the team</a>
+      </div>
+    </div>
+  </section>
+
+  <GetInvolvedCTA title="Ready to be listed here?" body="The next partner story on this page could be yours." primaryLabel="Contact us" primaryUrl="/contact" secondaryLabel="Our projects" secondaryUrl="/projects" />
+</BaseLayout>
+
+<style>
+  .section--flush {
+    padding-top: 0;
+  }
+
+  .partner-grid {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+
+  .slot-list {
+    list-style: none;
+    margin: 0 0 var(--space-4);
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+    max-width: 34rem;
+  }
+
+  .slot-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-alt);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-4) var(--space-5);
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .slot-note {
+    margin-top: 0.35rem;
+    font-size: 0.78rem;
+    color: var(--ink-2);
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .slot-legal {
+    color: var(--ink-2);
+    font-size: 0.85rem;
+    max-width: 44rem;
+  }
+
+  .collab {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3rem);
+  }
+
+  @media (min-width: 900px) {
+    .collab {
+      grid-template-columns: 1.2fr 1fr;
+      align-items: center;
+    }
+  }
+
+  .collab-list {
+    list-style: none;
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .collab-list strong {
+    font-family: var(--font-heading);
+  }
+
+  .collab-list li {
+    border-left: 3px solid var(--accent);
+    background: var(--bg-alt);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: var(--space-3) var(--space-4);
+    font-size: 0.95rem;
+    color: var(--ink-2);
+    line-height: 1.6;
+  }
+
+  .collab-cta {
+    padding: var(--space-6);
+  }
+
+  .collab-cta p {
+    color: var(--ink-2);
+  }
+
+  .collab-cta .btn {
+    margin-top: var(--space-3);
+  }
+</style>

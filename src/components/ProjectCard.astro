@@ -1,0 +1,122 @@
+---
+import ImagePlaceholder from './ImagePlaceholder.astro';
+import { getProject } from '../data/projects';
+
+interface Props {
+  slug: string;
+  /** Layout variant: editorial (default) or featured (wider image). */
+  variant?: 'editorial' | 'featured';
+}
+
+const { slug, variant = 'editorial' } = Astro.props;
+const project = getProject(slug);
+if (!project) throw new Error(`Unknown project slug: ${slug}`);
+---
+
+<article class:list={['project-card', `project-card--${variant}`]}>
+  <a href={`/projects/${project.slug}`} class="project-card__media-link">
+    <ImagePlaceholder
+      image={project.image}
+      alt={project.imageAlt}
+      label="Project photograph to be added"
+      ratio={variant === 'featured' ? 'wide' : 'photo'}
+      class="project-card__media"
+    />
+  </a>
+  <div class="project-card__body">
+    <p class="project-card__category">{project.category}</p>
+    <h3 class="project-card__title">
+      <a href={`/projects/${project.slug}`}>{project.name}</a>
+    </h3>
+    <p class="project-card__summary">{project.summary}</p>
+    <a class="read-more" href={`/projects/${project.slug}`}>
+      Explore the project <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</article>
+
+<style>
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+    height: 100%;
+  }
+
+  .project-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .project-card__media {
+    border: 0;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+  }
+
+  .project-card__body {
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.4rem;
+  }
+
+  .project-card__category {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    margin: 0;
+  }
+
+  .project-card__title {
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  .project-card__title a {
+    color: var(--ink);
+  }
+
+  .project-card__title a:hover {
+    color: var(--accent-deep);
+  }
+
+  .project-card__summary {
+    color: var(--ink-2);
+    font-size: 0.95rem;
+    margin: 0;
+    flex: 1;
+  }
+
+  .read-more {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--accent-deep);
+    margin-top: var(--space-3);
+  }
+
+  .read-more:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    color: var(--accent-deep);
+  }
+
+  /* Featured variant: roomier type for wide layouts */
+  .project-card--featured .project-card__title {
+    font-size: 1.5rem;
+  }
+
+  .project-card--featured .project-card__summary {
+    font-size: 1rem;
+    max-width: 52ch;
+  }
+</style>

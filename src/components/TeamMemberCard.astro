@@ -1,0 +1,103 @@
+---
+import ImagePlaceholder from './ImagePlaceholder.astro';
+
+interface Member {
+  name?: string;
+  role?: string;
+  image?: string | null;
+}
+
+interface Props {
+  member?: Member;
+  /** When true, renders an explicit "profile to be added" card. */
+  placeholder?: boolean;
+  placeholderNote?: string;
+}
+
+const { member, placeholder = false, placeholderNote } = Astro.props;
+const isPlaceholder = placeholder || !member?.name;
+---
+
+<article class:list={['team-card', { 'team-card--empty': isPlaceholder }]}>
+  {
+    isPlaceholder ? (
+      <div class="team-card__inner">
+        <div class="team-card__avatar team-card__avatar--empty" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="8" r="3.4" />
+            <path d="M5 19.5c1.4-3 4-4.6 7-4.6s5.6 1.6 7 4.6" />
+          </svg>
+        </div>
+        <h3 class="team-card__name">Member profile to be added</h3>
+        <p class="team-card__role">{member?.role ?? placeholderNote ?? 'Names and roles will be added when the chapter confirms the roster'}</p>
+      </div>
+    ) : (
+      <div class="team-card__inner">
+        <ImagePlaceholder
+          image={member.image ?? null}
+          alt={`Portrait of ${member.name}`}
+          label="Portrait to be added"
+          ratio="square"
+          class="team-card__photo"
+        />
+        <h3 class="team-card__name">{member.name}</h3>
+        <p class="team-card__role">{member.role}</p>
+      </div>
+    )
+  }
+</article>
+
+<style>
+  .team-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .team-card--empty {
+    background: var(--bg-alt);
+    border-style: dashed;
+  }
+
+  .team-card__inner {
+    padding: var(--space-5);
+    text-align: center;
+  }
+
+  .team-card__photo {
+    margin-bottom: var(--space-3);
+    max-width: 155px;
+    margin-inline: auto;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .team-card__avatar--empty {
+    width: 3.4rem;
+    height: 3.4rem;
+    margin: 0.5rem auto var(--space-4);
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(213, 166, 46, 0.12);
+    color: var(--accent-deep);
+  }
+
+  .team-card__name {
+    font-size: 1.02rem;
+    margin: 0 0 0.25rem;
+  }
+
+  .team-card--empty .team-card__name {
+    color: var(--ink-2);
+    font-weight: 600;
+  }
+
+  .team-card__role {
+    color: var(--ink-2);
+    font-size: 0.85rem;
+    margin: 0;
+  }
+</style>

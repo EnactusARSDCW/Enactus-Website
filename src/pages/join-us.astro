@@ -1,0 +1,206 @@
+---
+import BaseLayout from '../components/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import GetInvolvedCTA from '../components/GetInvolvedCTA.astro';
+import { site } from '../data/site';
+
+const ways = [
+  {
+    title: 'Join as a student member',
+    body: 'Recruitment happens in waves — most recently a September 2024 form and a 2024–25 results announcement on the chapter’s Linktree. New cycles are announced first on Instagram.',
+    action: { label: 'Watch our Instagram for announcements', url: 'https://www.instagram.com/enac.arsd/' },
+  },
+  {
+    title: 'Volunteer with a project',
+    body: 'Not on the core team but want to help? Project teams periodically need volunteers for drives, sales days and outreach sessions.',
+    action: { label: 'Contact the team', url: `mailto:${site.email}?subject=Volunteering%20with%20Enactus%20ARSD` },
+  },
+  {
+    title: 'Partner or sponsor',
+    body: 'Collaborators gave our first grant in 2020 and community partners anchor two of our projects. Bring a partnership idea and we will listen.',
+    action: { label: 'See partner options', url: '/partners' },
+  },
+];
+---
+
+<BaseLayout
+  title="Join Us"
+  description="Join Enactus ARSD as a student member, volunteer on a project, or partner with the chapter of ARSD College, University of Delhi."
+  extraTopPad
+>
+  <div class="container">
+    <PageHero
+      kicker="Join us"
+      title="Build something that outlives your semester."
+      lede="Members of Enactus ARSD design ventures, run fieldwork, negotiate with suppliers, tell stories and manage money — real operating experience, aimed at real people."
+    />
+  </div>
+
+  <section class="section section--flush">
+    <div class="container ways">
+      {ways.map((w, i) => (
+        <article class="way">
+          <span class="way__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <h3>{w.title}</h3>
+          <p>{w.body}</p>
+          <a class="text-link" href={w.action.url}>{w.action.label} ↗</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container form-wrap">
+      <SectionHeading
+        kicker="Application"
+        title="Show your interest"
+        lede="Recruitment rounds open and close through the year. Register your interest now and the team will reach you when the next round opens."
+      />
+      <form id="join-form" novalidate>
+        <div class="form-row">
+          <div class="field">
+            <label for="jf-name">Full name <span aria-hidden="true">*</span></label>
+            <input id="jf-name" name="name" type="text" autocomplete="name" required />
+            <p class="error">Please enter your name.</p>
+          </div>
+          <div class="field">
+            <label for="jf-email">Email address <span aria-hidden="true">*</span></label>
+            <input id="jf-email" name="email" type="email" autocomplete="email" required />
+            <p class="error">Please enter a valid email address.</p>
+          </div>
+          <div class="field">
+            <label for="jf-course">Course & year <span aria-hidden="true">*</span></label>
+            <input id="jf-course" name="course" type="text" placeholder="e.g. B.Com (Hons), 2nd year" required />
+            <p class="error">Please tell us your course and year.</p>
+          </div>
+          <div class="field">
+            <label for="jf-phone">Phone (optional)</label>
+            <input id="jf-phone" name="phone" type="tel" autocomplete="tel" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="jf-interest">What interests you most? <span aria-hidden="true">*</span></label>
+          <textarea id="jf-interest" name="interest" rows="5" required minlength="15"></textarea>
+          <p class="hint">Projects, events, design, outreach, finance — whatever you would enjoy contributing to.</p>
+          <p class="error">Please write a few words about your interests (at least 15 characters).</p>
+        </div>
+
+        <button type="submit" class="btn btn--accent">Send my interest by email</button>
+        <p class="honest">
+          Frontend placeholder: this form does not save applications yet — it opens your email app with your details
+          ready to send. Direct email: <a class="text-link" href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <GetInvolvedCTA title="Not ready to apply just yet?" body="Follow the chapter online or write to us with a question — no commitment implied." primaryLabel="Contact the team" primaryUrl="/contact" secondaryLabel="See our projects" secondaryUrl="/projects" />
+</BaseLayout>
+
+<style>
+  .section--flush {
+    padding-top: 0;
+  }
+
+  .ways {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  .way {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6) var(--space-5);
+    position: relative;
+  }
+
+  .way__num {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 1.05rem;
+    display: block;
+    margin-bottom: var(--space-3);
+  }
+
+  .way h3 {
+    font-size: 1.15rem;
+  }
+
+  .way p {
+    color: var(--ink-2);
+    font-size: 0.94rem;
+  }
+
+  .form-wrap {
+    max-width: 46rem;
+  }
+
+  .form-wrap :global(.section-heading) {
+    margin-bottom: var(--space-5);
+  }
+
+  .form-row {
+    display: grid;
+    gap: 0 var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .form-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .honest {
+    margin-top: var(--space-4);
+    font-size: 0.85rem;
+    color: var(--ink-2);
+  }
+</style>
+
+<script>
+  // Interest form: validate, then hand off to the visitor's own email app.
+const form = document.getElementById('join-form') as HTMLFormElement | null;
+form?.querySelectorAll('input[name], textarea[name]').forEach((el) => {
+  const control = el as HTMLInputElement | HTMLTextAreaElement;
+  control.addEventListener('input', () => {
+    const field = el.closest<HTMLElement>('.field');
+    if (field) field.classList.remove('invalid');
+  });
+});
+
+form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let firstInvalid: HTMLElement | null = null;
+
+    form.querySelectorAll('input[name], textarea[name]').forEach((el) => {
+      const field = el.closest<HTMLElement>('.field');
+      if (!(field instanceof HTMLElement)) return;
+      const input = el as HTMLInputElement | HTMLTextAreaElement;
+      const ok = input.checkValidity();
+      field.classList.toggle('invalid', !ok);
+      if (!ok && !firstInvalid) firstInvalid = field;
+    });
+
+    if (firstInvalid) {
+      const control = firstInvalid.querySelector('input, textarea');
+      if (control instanceof HTMLElement) control.focus();
+      return;
+    }
+
+    const data = new FormData(form);
+    const subject = encodeURIComponent('Enactus ARSD — recruitment interest');
+    const body = encodeURIComponent(
+      `Name: ${data.get('name')}\nEmail: ${data.get('email')}\nCourse & year: ${data.get('course')}\nPhone: ${data.get('phone') || '—'}\n\nInterests:\n${data.get('interest')}`,
+    );
+    window.location.href = `mailto:enactusarsdchapter@gmail.com?subject=${subject}&body=${body}`;
+
+    const honest = form.querySelector('.honest');
+    if (honest instanceof HTMLElement) {
+      honest.textContent = 'Your email app should now be open with your interest ready to send. If it did not open, write to enactusarsdchapter@gmail.com directly.';
+    }
+  });
+</script>

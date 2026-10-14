@@ -1,0 +1,185 @@
+---
+import BaseLayout from '../../components/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ImagePlaceholder from '../../components/ImagePlaceholder.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import { products, getProduct } from '../../data/products';
+import { getProject } from '../../data/projects';
+import { site } from '../../data/site';
+
+export function getStaticPaths() {
+  return products.map((p) => ({ params: { slug: p.slug }, props: { product: p } }));
+}
+
+const { product }: { product: Exclude<ReturnType<typeof getProduct>, undefined> } = Astro.props;
+const project = product ? getProject(product.projectSlug) : undefined;
+const others = products.filter((p) => p.slug !== product.slug);
+const productName = project ? project.name.replace(/^Project\s+/, '') : 'our projects';
+const enquirySubject = `Enquiry: ${product.name}`;
+---
+
+<BaseLayout title={product.name} description={product.description[0]}>
+  <div class="hero container">
+    <Breadcrumbs items={[{ label: 'Shop', url: '/shop' }, { label: product.name }]} />
+  </div>
+
+  <section class="section section--flush">
+    <div class="container product-layout">
+      <div class="product-media">
+        <ImagePlaceholder
+          image={product.image}
+          alt={product.imageAlt}
+          label="Product photograph to be added"
+          ratio="square"
+          loading="eager"
+        />
+      </div>
+
+      <div class="product-info">
+        <nav class="from-project" aria-label="Related project">
+          <a href={`/projects/${project?.slug}`}>
+            Supporting <strong>Project {productName}</strong>
+          </a>
+        </nav>
+        <h1>{product.name}</h1>
+        <p class="price">{product.price ?? 'Price on enquiry'}</p>
+        {product.availability && <p class="availability">{product.availability}</p>}
+        {product.description.map((para) => <p class="desc">{para}</p>)}
+
+        {
+          product.variants && product.variants.length > 0 && (
+            <div class="variants">
+              <p class="kicker kicker--bare">Available options</p>
+              <ul>
+                {product.variants.map((v) => (
+                  <li>{v}</li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+
+        <div class="actions">
+          <a class="btn btn--accent" href={`mailto:${site.email}?subject=${encodeURIComponent(enquirySubject)}`}>
+            Enquire about this product
+          </a>
+        </div>
+
+        <p class="honesty-note">
+          No payments are collected on this website yet. Enquiries are handled directly by email with the chapter.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {
+    others.length > 0 && (
+      <section class="section section--alt">
+        <div class="container">
+          <SectionHeading kicker="More from the shop" title="You may also like" />
+          <div class="related-grid">
+            {others.map((p) => (
+              <ProductCard slug={p.slug} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: clamp(2rem, 4vw, 3rem) 0;
+  }
+
+  .section--flush {
+    padding-top: 0;
+  }
+
+  .product-layout {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .product-layout {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .from-project a {
+    color: var(--accent-deep);
+    font-size: 0.92rem;
+  }
+
+  .from-project a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .product-info h1 {
+    margin-top: var(--space-3);
+    max-width: 16ch;
+  }
+
+  .price {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--accent-deep);
+    margin-bottom: var(--space-2);
+  }
+
+  .availability {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: var(--ink-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.3rem 0.85rem;
+    margin-bottom: var(--space-4);
+  }
+
+  .desc {
+    color: var(--ink-2);
+  }
+
+  .variants {
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-4);
+    margin-top: var(--space-4);
+  }
+
+  .variants ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.93rem;
+    color: var(--ink-2);
+  }
+
+  .variants li::before {
+    content: '· ';
+    color: var(--accent-deep);
+    font-weight: 700;
+  }
+
+  .actions {
+    margin-top: var(--space-5);
+  }
+
+  .honesty-note {
+    margin-top: var(--space-3);
+    font-size: 0.82rem;
+    color: var(--ink-2);
+  }
+
+  .related-grid {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+</style>

@@ -1,0 +1,234 @@
+---
+import BaseLayout from '../components/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import GetInvolvedCTA from '../components/GetInvolvedCTA.astro';
+import ImagePlaceholder from '../components/ImagePlaceholder.astro';
+import { affiliations } from '../data/team';
+import { site } from '../data/site';
+---
+
+<BaseLayout
+  title="About Us"
+  description="Enactus ARSD is the student-led Enactus chapter of Atma Ram Sanatan Dharma College, University of Delhi — our mission, values and how we work."
+  extraTopPad
+>
+  <div class="container">
+    <PageHero
+      kicker="About us"
+      title="A student chapter with its feet in the community."
+      lede="We are Enactus ARSD — the Enactus chapter of Atma Ram Sanatan Dharma College, University of Delhi — a team of students who believe entrepreneurial action can make life better for the people around us."
+    />
+  </div>
+
+  <!-- Introduction -->
+  <section class="section">
+    <div class="container editorial-split">
+      <div>
+        <p class="kicker">The organisation</p>
+        <h2>Part of something bigger.</h2>
+        <p>
+          Enactus is a global network of student teams that use entrepreneurial action to address social
+          challenges. Within that network, each chapter is a team rooted in its own campus and community.
+        </p>
+        <p>
+          Enactus ARSD is the chapter of Atma Ram Sanatan Dharma College, University of Delhi. Our members design
+          and run social ventures alongside the communities they serve — from artisan livelihoods to mental-health
+          support.
+        </p>
+      </div>
+      <div>
+        <h3 class="affil-heading">Affiliations</h3>
+        <ul class="affil-list">
+          {affiliations.map((a) => <li><strong>{a.name}</strong><span>{a.relationship}</span></li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission / vision / values -->
+  <section class="section section--alt">
+    <div class="container">
+      <SectionHeading kicker="What drives us" title="Mission, vision & values" lede="A short statement of purpose — and the principles we hold while pursuing it." />
+      <div class="mvv">
+        <article>
+          <h3>Mission</h3>
+          <p>
+            To empower communities through entrepreneurial action — creating livelihoods, well-being and dignity
+            with the people, not just for them.
+          </p>
+        </article>
+        <article>
+          <h3>Vision</h3>
+          <p>
+            A campus team that keeps proving social enterprise works at the smallest level first: one artisan, one
+            gardener, one neighbourhood at a time.
+          </p>
+        </article>
+        <article>
+          <h3>Values</h3>
+          <ul>
+            <li><strong>Human first</strong> — projects start from listening.</li>
+            <li><strong>Integrity</strong> — we publish only claims we can stand behind.</li>
+            <li><strong>Action</strong> — ideas count once they change something on the ground.</li>
+            <li><strong>Learning</strong> — every project is as much for our members as its beneficiaries.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Methodology -->
+  <section class="section">
+    <div class="container">
+      <div class="editorial-split">
+        <ImagePlaceholder
+          image={null}
+          alt="Enactus ARSD methodology workshop. Photograph to be added."
+          label="Team photograph to be added"
+          ratio="wide"
+        />
+        <div>
+          <p class="kicker">How we work</p>
+          <h2>From listening to a working venture.</h2>
+          <ol class="steps">
+            <li><strong>Identify</strong> — pick a challenge where a small team can genuinely help.</li>
+            <li><strong>Design</strong> — with the community, shape a sustainable venture.</li>
+            <li><strong>Build</strong> — find partners, funding and routes to market.</li>
+            <li><strong>Sustain</strong> — measure, refine, keep it standing after we graduate.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Background/history -->
+  <section class="section section--alt">
+    <div class="container narrow">
+      <p class="kicker">Background</p>
+      <h2>A chapter that has grown with its city.</h2>
+      <p>
+        Our published history begins with a visible push in 2020: projects Kalakaari and Srijan earning the chapter
+        a KPMG Business Ethics Grant, and the first Ennovate — Enactus Day — on 5 February 2020. The team went on to
+        compete at Enactus Nationals in 2022 with Project Samvedna and Project Srijan.
+      </p>
+      <p class="muted">
+        We are writing the rest of that history now — new projects, new partners, and the next generation of the
+        core team. If you were part of an earlier chapter cohort, we would love to hear from you at
+        <a class="text-link" href={`mailto:${site.email}`}>{site.email}</a>.
+      </p>
+    </div>
+  </section>
+
+  <GetInvolvedCTA secondaryUrl="/projects" secondaryLabel="See our projects" />
+</BaseLayout>
+
+<style>
+  .mvv {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  @media (min-width: 900px) {
+    .mvv {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .mvv article {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+  }
+
+  .mvv p,
+  .mvv li {
+    color: var(--ink-2);
+    font-size: 0.95rem;
+  }
+
+  .mvv ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .mvv ul span {
+    color: var(--ink-2);
+  }
+
+  .affil-heading {
+    font-size: 1.05rem;
+    margin-bottom: var(--space-4);
+  }
+
+  .affil-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .affil-list strong {
+    display: block;
+    font-family: var(--font-heading);
+  }
+
+  .affil-list span {
+    display: block;
+    color: var(--ink-2);
+    font-size: 0.95rem;
+    margin-top: 0.2rem;
+  }
+
+  .steps {
+    list-style: none;
+    counter-reset: step;
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .steps li {
+    counter-increment: step;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-4) var(--space-5) var(--space-4) 5.2rem;
+    position: relative;
+    color: var(--ink-2);
+  }
+
+  .steps li::before {
+    content: counter(step, decimal-leading-zero);
+    position: absolute;
+    left: var(--space-5);
+    top: var(--space-4);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .steps strong {
+    color: var(--ink);
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .narrow h2 {
+    max-width: 30ch;
+  }
+
+  .narrow {
+    max-width: 50rem;
+  }
+
+  .muted {
+    color: var(--ink-2);
+  }
+</style>

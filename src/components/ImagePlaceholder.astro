@@ -1,0 +1,85 @@
+---
+// Reusable image-slot component. Renders a real photograph when one exists,
+// otherwise a calm, labelled placeholder — never a fabricated/AI image.
+interface Props {
+  image?: string | null;
+  alt: string;
+  label?: string;
+  ratio?: 'wide' | 'tall' | 'square' | 'photo';
+  class?: string;
+  loading?: 'eager' | 'lazy';
+}
+
+const {
+  image = null,
+  alt,
+  label = 'Project photograph to be added',
+  ratio = 'photo',
+  class: className = '',
+  loading = 'lazy',
+} = Astro.props;
+
+const ratioCss =
+  ratio === 'wide' ? 'aspect-ratio: 16 / 9;' :
+  ratio === 'tall' ? 'aspect-ratio: 4 / 5;' :
+  ratio === 'square' ? 'aspect-ratio: 1 / 1;' :
+  'aspect-ratio: 3 / 2;';
+---
+
+<figure class={`media-slot ${className}`} style={ratioCss} aria-label={image ? undefined : label}>
+  {
+    image ? (
+      <img src={image} alt={alt} loading={loading} decoding="async" />
+    ) : (
+      <div class="media-slot__placeholder" role="img" aria-label={alt}>
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <circle cx="8.5" cy="10" r="1.6" />
+          <path d="m3 17 5.2-5.2a1 1 0 0 1 1.4 0L15 17" />
+          <path d="m13.5 14.5 2-2a1 1 0 0 1 1.4 0L21 16.5" />
+        </svg>
+        <span>{label}</span>
+      </div>
+    )
+  }
+  {Astro.slots.default && image ? <figcaption class="media-slot__caption sr-only"><slot /></figcaption> : null}
+</figure>
+
+<style>
+  figure.media-slot {
+    margin: 0;
+    width: 100%;
+    overflow: hidden;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  }
+
+  figure.media-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .media-slot__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    color: var(--ink-2);
+    background:
+      linear-gradient(135deg, rgba(213, 166, 46, 0.05) 0%, transparent 45%),
+      var(--bg-alt);
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .media-slot__placeholder span {
+    font-size: 0.82rem;
+    max-width: 22ch;
+    line-height: 1.45;
+  }
+</style>

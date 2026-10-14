@@ -1,0 +1,455 @@
+/* ============================================================
+   ENACTUS ARSD — Global stylesheet
+   Design tokens, base typography, shared primitives.
+   ============================================================ */
+
+:root {
+  /* Colour tokens */
+  --bg: #ffffff;
+  --bg-alt: #f7f6f2;
+  --ink: #202020;
+  --ink-2: #686868;
+  --accent: #d5a62e;
+  --accent-deep: #a8821f;
+  --border: #e7e5df;
+  --dark: #222222;
+  --glass: rgba(255, 255, 255, 0.68);
+
+  /* Type */
+  --font-heading: 'DM Sans Variable', 'DM Sans', 'Segoe UI', sans-serif;
+  --font-body: 'Inter Variable', 'Inter', 'Segoe UI', sans-serif;
+
+  /* Rhythm */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2.25rem;
+  --space-7: 3.5rem;
+  --space-8: 5rem;
+  --space-9: 7rem;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  --shadow-sm: 0 1px 3px rgba(32, 32, 32, 0.06), 0 1px 2px rgba(32, 32, 32, 0.04);
+  --shadow-md: 0 8px 24px rgba(32, 32, 32, 0.08);
+  --shadow-lg: 0 16px 48px rgba(32, 32, 32, 0.12);
+
+  --container: 1160px;
+  --container-narrow: 720px;
+  --header-h: 72px;
+}
+
+/* ---------- Reset & base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 var(--space-4);
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(1.9rem, 4vw, 2.75rem);
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: -0.015em;
+}
+
+h3 {
+  font-size: 1.2rem;
+}
+
+p {
+  margin: 0 0 var(--space-4);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-deep);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: rgba(213, 166, 46, 0.25);
+}
+
+main {
+  min-height: 60vh;
+}
+
+/* ---------- Layout primitives ---------- */
+.container {
+  width: 100%;
+  max-width: calc(var(--container) + 2 * var(--space-5));
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+.container-narrow {
+  width: 100%;
+  max-width: calc(var(--container-narrow) + 2 * var(--space-5));
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+.section {
+  padding-block: clamp(3rem, 7vw, 5.5rem);
+}
+
+.section--alt {
+  background: var(--bg-alt);
+}
+
+.section--dark {
+  background: var(--dark);
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.section--dark h1,
+.section--dark h2,
+.section--dark h3 {
+  color: #fff;
+}
+
+/* ---------- Editorial helpers ---------- */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+  margin-bottom: var(--space-3);
+}
+
+.kicker::before {
+  content: '';
+  width: 2rem;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.kicker--bare::before {
+  display: none;
+}
+
+.lede {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: var(--ink-2);
+  max-width: 46rem;
+}
+
+.text-link {
+  color: var(--accent-deep);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgba(213, 166, 46, 0.45);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.text-link:hover {
+  text-decoration-color: currentColor;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1;
+  padding: 0.8rem 1.5rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.btn--primary {
+  background: var(--dark);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: #3a3a3a;
+  color: #fff;
+}
+
+.btn--accent {
+  background: var(--accent);
+  color: var(--dark);
+}
+
+.btn--accent:hover {
+  background: #e3b53d;
+  color: var(--dark);
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+.btn--ghost:hover {
+  border-color: var(--ink-2);
+}
+
+.btn--on-dark {
+  background: #fff;
+  color: var(--dark);
+}
+
+.btn--on-dark:hover {
+  background: var(--bg-alt);
+  color: var(--dark);
+}
+
+.btn--ghost-on-dark {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #fff;
+}
+
+.btn--ghost-on-dark:hover {
+  border-color: #fff;
+  color: #fff;
+}
+
+/* ---------- Glass panel (restrained) ---------- */
+.glass-panel {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+/* ---------- Forms ---------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.field label {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.field .hint {
+  font-size: 0.82rem;
+  color: var(--ink-2);
+}
+
+.field input,
+.field select,
+.field textarea {
+  font: inherit;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 0.9rem;
+  width: 100%;
+  transition: border-color 0.2s ease;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 7.5rem;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(213, 166, 46, 0.15);
+}
+
+.field.invalid input,
+.field.invalid textarea,
+.field.invalid select {
+  border-color: #b3403a;
+}
+
+.field .error {
+  display: none;
+  font-size: 0.82rem;
+  color: #b3403a;
+}
+
+.field.invalid .error {
+  display: block;
+}
+
+.form-status {
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  display: none;
+}
+
+.form-status.is-error {
+  display: block;
+  background: #fdf1f0;
+  border: 1px solid #eccfcd;
+  color: #8f3531;
+}
+
+.form-status.is-success {
+  display: block;
+  background: #f2f7f0;
+  border: 1px solid #d5e3cf;
+  color: #3d5a33;
+}
+
+/* ---------- Utilities ---------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-4);
+  z-index: 200;
+  background: var(--dark);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: var(--space-3);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+
+.def-list {
+  margin: 0;
+  padding: 0;
+}
+
+.def-list dt {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  margin-top: var(--space-4);
+  font-size: 0.95rem;
+}
+
+.def-list dd {
+  margin: 0.2rem 0 0;
+  color: var(--ink-2);
+}
+
+/* Two-column editorial rows */
+.editorial-split {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: center;
+}
+
+@media (min-width: 820px) {
+  .editorial-split {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .editorial-split--reverse > :first-child {
+    order: 2;
+  }
+}

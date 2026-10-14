@@ -1,0 +1,57 @@
+---
+import Breadcrumbs from './Breadcrumbs.astro';
+
+interface Crumb {
+  label: string;
+  url?: string;
+}
+
+interface Props {
+  kicker?: string;
+  title: string;
+  lede?: string;
+  breadcrumbs?: Crumb[];
+  dark?: boolean;
+}
+
+const { kicker, title, lede, breadcrumbs, dark = false } = Astro.props;
+---
+
+<section class:list={['page-hero', { 'page-hero--dark': dark }]}>
+  <div class="container">
+    {breadcrumbs && <Breadcrumbs items={breadcrumbs} onDark={dark} />}
+    {kicker && <p class="kicker">{kicker}</p>}
+    <h1>{title}</h1>
+    {lede && <p class="lede">{lede}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    padding-block: clamp(3rem, 8vw, 6rem) clamp(2.5rem, 6vw, 4rem);
+    background: var(--bg);
+  }
+
+  .page-hero--dark {
+    background: var(--dark);
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .page-hero--dark h1 {
+    color: #fff;
+  }
+
+  .page-hero--dark .lede {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .page-hero h1 {
+    max-width: 20ch;
+    margin-bottom: var(--space-4);
+  }
+
+  .page-hero .lede {
+    margin-bottom: 0;
+  }
+</style>

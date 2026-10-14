@@ -1,0 +1,310 @@
+---
+import BaseLayout from '../components/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import GetInvolvedCTA from '../components/GetInvolvedCTA.astro';
+import { gallerySections } from '../data/gallery';
+---
+
+<BaseLayout
+  title="Gallery"
+  description="Photographs from Enactus ARSD events and project fieldwork — on-campus events, community visits and team life."
+  extraTopPad
+>
+  <div class="container">
+    <PageHero
+      kicker="Gallery"
+      title="Moments from our work."
+      lede="Event photographs and project fieldwork, collected from the chapter's activities. Slots below are labelled and ready — real photographs take their place one-for-one as the chapter shares them."
+    />
+  </div>
+
+  <section class="section section--flush">
+    <div class="container">
+      {
+        gallerySections.map((section, si) => (
+          <div class="gallery-section">
+            <h2>{section.title}</h2>
+            <p class="section-desc">{section.description}</p>
+            <ul class="photo-grid" role="list">
+              {section.images.map((img, ii) => (
+                <li>
+                  <button
+                    type="button"
+                    class="photo-slot"
+                    aria-label={`${img.caption}. Open larger view.`}
+                    data-lightbox-caption={img.caption}
+                  >
+                    <span class="photo-slot__label" aria-hidden="true">{img.caption}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+
+      <div class="gallery-note">
+        <p>
+          This gallery uses labelled placeholders rather than borrowed stock photos — none of these depict Enactus
+          ARSD people or events yet. When the chapter supplies photographs they will be added with accurate
+          captions and context.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Image viewer">
+    <div class="lightbox__panel glass-panel">
+      <button type="button" class="lightbox__close" aria-label="Close image viewer">✕</button>
+      <div class="lightbox__stage">
+        <p class="lightbox__caption" id="lightbox-caption"></p>
+        <p class="lightbox__hint">Photograph to be added — this viewer is ready for real gallery images.</p>
+      </div>
+      <div class="lightbox__nav">
+        <button type="button" data-lightbox-prev aria-label="Previous image">←</button>
+        <span class="lightbox__count" id="lightbox-count"></span>
+        <button type="button" data-lightbox-next aria-label="Next image">→</button>
+      </div>
+    </div>
+  </div>
+
+  <GetInvolvedCTA title="Follow the day-to-day" body="The chapter posts project updates, events and field-diary moments on Instagram as they happen." primaryLabel="See Instagram" primaryUrl="https://www.instagram.com/enac.arsd/" secondaryLabel="Get involved" secondaryUrl="/join-us" />
+</BaseLayout>
+
+<style>
+  .section--flush {
+    padding-top: 0;
+  }
+
+  .gallery-section {
+    margin-bottom: var(--space-8);
+  }
+
+  .gallery-section:last-of-type {
+    margin-bottom: var(--space-7);
+  }
+
+  .gallery-section h2 {
+    font-size: 1.35rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .section-desc {
+    color: var(--ink-2);
+    font-size: 0.95rem;
+    max-width: 46rem;
+    margin-bottom: var(--space-5);
+  }
+
+  .photo-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  }
+
+  .photo-slot {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, rgba(213, 166, 46, 0.05) 0%, transparent 45%), var(--bg-alt);
+    display: grid;
+    place-items: center;
+    padding: var(--space-4);
+    cursor: zoom-in;
+    color: var(--ink-2);
+    font-size: 0.85rem;
+    text-align: center;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .photo-slot:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: grid;
+    place-items: center;
+    background: rgba(34, 34, 34, 0.75);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: var(--space-5);
+  }
+
+  .lightbox[hidden] {
+    display: none;
+  }
+
+  .lightbox__panel {
+    max-width: 42rem;
+    width: 100%;
+    padding: var(--space-6);
+    position: relative;
+  }
+
+  .lightbox__close {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 2.4rem;
+    height: 2.4rem;
+    cursor: pointer;
+    color: var(--ink);
+    font-size: 1rem;
+  }
+
+  .lightbox__close:hover {
+    border-color: var(--accent);
+    color: var(--accent-deep);
+  }
+
+  .lightbox__stage {
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-alt);
+    aspect-ratio: 16 / 9;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: var(--space-5);
+  }
+
+  .lightbox__caption {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--ink);
+    max-width: 40ch;
+    margin-bottom: var(--space-2);
+  }
+
+  .lightbox__hint {
+    color: var(--ink-2);
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .lightbox__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-top: var(--space-5);
+  }
+
+  .lightbox__nav button {
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .lightbox__nav button:hover {
+    border-color: var(--accent);
+    color: var(--accent-deep);
+  }
+
+  .lightbox__count {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--ink-2);
+  }
+
+  .gallery-note {
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-5);
+  }
+
+  .gallery-note p {
+    color: var(--ink-2);
+    font-size: 0.88rem;
+    max-width: 46rem;
+    margin: 0;
+  }
+</style>
+
+<script>
+  // Lightbox: open, close, prev/next, keyboard controls. Placeholder slots
+  // stand in for real images until the chapter supplies photos.
+  const slots = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-lightbox-caption]'));
+  const lightbox = document.getElementById('lightbox');
+  if (lightbox instanceof HTMLElement) {
+    const caption = lightbox.querySelector<HTMLElement>('#lightbox-caption');
+    const count = lightbox.querySelector<HTMLElement>('#lightbox-count');
+    const closeBtn = lightbox.querySelector<HTMLButtonElement>('.lightbox__close');
+    const prevBtn = lightbox.querySelector<HTMLButtonElement>('[data-lightbox-prev]');
+    const nextBtn = lightbox.querySelector<HTMLButtonElement>('[data-lightbox-next]');
+    let index = 0;
+    let lastFocus: HTMLElement | null = null;
+
+    const render = () => {
+      if (!caption || !count) return;
+      caption.textContent = slots[index].dataset.lightboxCaption ?? '';
+      count.textContent = `${index + 1} / ${slots.length}`;
+    };
+
+    const open = (i: number) => {
+      index = i;
+      render();
+      lastFocus = document.activeElement as HTMLElement;
+      lightbox.hidden = false;
+      document.body.style.overflow = 'hidden';
+      closeBtn?.focus();
+    };
+
+    const close = () => {
+      lightbox.hidden = true;
+      document.body.style.overflow = '';
+      lastFocus?.focus();
+    };
+
+    const move = (delta: number) => {
+      index = (index + delta + slots.length) % slots.length;
+      render();
+    };
+
+    slots.forEach((slot, i) => slot.addEventListener('click', () => open(i)));
+    closeBtn?.addEventListener('click', close);
+    prevBtn?.addEventListener('click', () => move(-1));
+    nextBtn?.addEventListener('click', () => move(1));
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (lightbox.hidden) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') move(-1);
+      if (e.key === 'ArrowRight') move(1);
+      if (e.key === 'Tab' && lightbox) {
+        // simple focus trap
+        const focusables = lightbox.querySelectorAll<HTMLElement>('button');
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+  }
+</script>

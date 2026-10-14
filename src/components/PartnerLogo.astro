@@ -1,0 +1,93 @@
+---
+interface Partner {
+  name: string;
+  detail: string;
+  logo: string | null;
+  url: string | null;
+}
+
+interface Props {
+  partner: Partner;
+}
+
+const { partner } = Astro.props;
+const Wrapper = partner.url ? 'a' : 'div';
+const href = partner.url ?? undefined;
+---
+
+<Wrapper class="partner-logo" href={href} {...partner.url ? { rel: 'noopener', target: '_blank' } : {}}>
+  {
+    partner.logo ? (
+      <img src={partner.logo} alt={`${partner.name} logo`} class="partner-logo__img" loading="lazy" />
+    ) : (
+      <div class="partner-logo__mark" aria-hidden="true">{partner.name.slice(0, 2)}</div>
+    )
+  }
+  <div class="partner-logo__body">
+    <p class="partner-logo__name">{partner.name}</p>
+    <p class="partner-logo__detail">{partner.detail}</p>
+    {!partner.logo && <p class="partner-logo__note">Approved logo artwork to be added</p>}
+  </div>
+</Wrapper>
+
+<style>
+  .partner-logo {
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-start;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    height: 100%;
+  }
+
+  a.partner-logo:hover {
+    box-shadow: var(--shadow-sm);
+  }
+
+  .partner-logo__img {
+    width: 96px;
+    height: 48px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .partner-logo__mark {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    background: rgba(213, 166, 46, 0.14);
+    color: var(--accent-deep);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+  }
+
+  .partner-logo__body p {
+    margin: 0;
+  }
+
+  .partner-logo__name {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 0.98rem;
+  }
+
+  .partner-logo__detail {
+    color: var(--ink-2);
+    font-size: 0.88rem;
+    margin-top: 0.25rem !important;
+  }
+
+  .partner-logo__note {
+    color: var(--ink-2);
+    font-size: 0.76rem;
+    margin-top: 0.5rem !important;
+    font-style: italic;
+  }
+</style>

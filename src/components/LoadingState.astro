@@ -1,0 +1,65 @@
+---
+// Skeleton used while async content (e.g. future Supabase-backed lists) loads.
+interface Props {
+  label?: string;
+  rows?: number;
+}
+
+const { label = 'Loading content', rows = 3 } = Astro.props;
+---
+
+<div class="loading-state" role="status" aria-live="polite">
+  <span class="sr-only">{label}…</span>
+  {Array.from({ length: rows }).map(() => <div class="loading-state__row" aria-hidden="true"><div class="loading-state__media"></div><div class="loading-state__lines"><span></span><span></span></div></div>)}
+</div>
+
+<style>
+  .loading-state__row {
+    display: flex;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-3);
+  }
+
+  .loading-state__media {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--bg-alt);
+    flex-shrink: 0;
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+
+  .loading-state__lines {
+    flex: 1;
+    display: grid;
+    align-content: center;
+    gap: 0.6rem;
+  }
+
+  .loading-state__lines span {
+    height: 0.8rem;
+    border-radius: 4px;
+    background: var(--bg-alt);
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+
+  .loading-state__lines span:last-child {
+    width: 60%;
+  }
+
+  @keyframes pulse {
+    50% {
+      opacity: 0.55;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loading-state__media,
+    .loading-state__lines span {
+      animation: none;
+    }
+  }
+</style>

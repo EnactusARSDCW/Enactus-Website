@@ -1,0 +1,230 @@
+---
+import BaseLayout from '../../components/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { products } from '../../data/products';
+
+// All products are server-rendered; ?tag= filtering is applied client-side
+// from location.search so filters stay functional in a static deployment.
+const tags = [...new Set(products.flatMap((p) => p.tags))];
+---
+
+<BaseLayout
+  title="Shop"
+  description="Browse products from Enactus ARSD — handmade goods from our community projects. Every purchase supports the makers directly."
+  extraTopPad
+>
+  <div class="container">
+    <PageHero
+      kicker="Shop"
+      title="Buy something that stands for something."
+      lede="These products come directly from our projects. Because prices are agreed with makers per batch, most items are priced on enquiry while the store is being set up."
+    />
+  </div>
+
+  <section class="section section--flush">
+    <div class="container">
+      <div class="shop-meta">
+        <p class="count" id="shop-count" data-total={products.length}>
+          {products.length} product{products.length === 1 ? '' : 's'}
+        </p>
+        <nav class="tag-filter" aria-label="Filter products by category">
+          <a class="tag active" href="/shop" data-tag="">All</a>
+          {tags.map((t) => <a class="tag" href={`/shop?tag=${encodeURIComponent(t)}`} data-tag={t}>{t}</a>)}
+        </nav>
+      </div>
+
+      <div class="shop-grid">
+        <div class="products" id="shop-products">
+          {products.map((p) => <div data-product-tags={p.tags.join('|')}><ProductCard slug={p.slug} /></div>)}
+          <noscript>
+            <p class="filter-noscript-hint">Category filters need JavaScript; without it, all products are shown.</p>
+          </noscript>
+        </div>
+
+        <aside class="shop-note glass-panel">
+          <h3>How buying works for now</h3>
+          <ol>
+            <li>Pick a product and open its page.</li>
+            <li>Use the enquiry link — it emails the chapter directly.</li>
+            <li>We confirm batch availability, price and pickup/delivery.</li>
+          </ol>
+          <p>
+            This phase keeps things honest: no cart, no online payments yet, and no product claims we can't back. A
+            proper checkout arrives with our store upgrades.
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container maker-note">
+      <div>
+        <p class="kicker">Where products come from</p>
+        <h2>Made by real people we know.</h2>
+        <p>
+          Canvas totes come from the artisan community of Project Kalakaari. Potted plants are grown by the
+          gardeners behind Project Srijan. Products come from our projects, and money stays with makers first.
+        </p>
+        <a class="btn btn--ghost" href="/projects">Meet the projects behind the products</a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Client-side tag filter driven by ?tag= in the URL. Works after a static
+    // build because every product is rendered and filtering happens in-browser.
+    const wrap = document.getElementById('shop-products');
+    const count = document.getElementById('shop-count');
+    if (wrap && count) {
+      const items = Array.from(wrap.querySelectorAll<HTMLElement>('[data-product-tags]'));
+      const tag = new URLSearchParams(window.location.search).get('tag');
+
+      // reflect active tag in the nav
+      document.querySelectorAll<HTMLElement>('.tag-filter .tag').forEach((a) => {
+        const isMatch = tag ? a.dataset.tag === tag : !a.dataset.tag;
+        a.classList.toggle('active', isMatch);
+      });
+
+      if (tag) {
+        let visible = 0;
+        items.forEach((item) => {
+          const show = (item.dataset.productTags ?? '').split('|').includes(tag);
+          item.style.display = show ? '' : 'none';
+          if (show) visible += 1;
+        });
+        count.textContent = `${visible} product${visible === 1 ? '' : 's'} in ${tag}`;
+
+        if (visible === 0 && !document.getElementById('shop-empty')) {
+          const empty = document.createElement('div');
+          empty.id = 'shop-empty';
+          empty.className = 'shop-empty';
+          empty.innerHTML =
+            '<h3>Nothing in this category yet</h3><p>No products currently match that filter.</p><a class="btn btn--ghost" href="/shop">View all products</a>';
+          wrap.appendChild(empty);
+        }
+      }
+    }
+  </script>
+</BaseLayout>
+
+<style>
+  .section--flush {
+    padding-top: 0;
+  }
+
+  .shop-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .count {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .tag-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    font-size: 0.85rem;
+    font-family: var(--font-heading);
+    font-weight: 500;
+    padding: 0.45rem 0.95rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--ink-2);
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .tag:hover {
+    color: var(--ink);
+    border-color: var(--ink-2);
+  }
+
+  .tag.active {
+    background: var(--dark);
+    border-color: var(--dark);
+    color: #fff;
+  }
+
+  .shop-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 1020px) {
+    .shop-grid {
+      grid-template-columns: 2fr 1fr;
+      align-items: start;
+    }
+  }
+
+  .products {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    align-items: stretch;
+  }
+
+  .shop-note {
+    padding: var(--space-5);
+  }
+
+  .shop-note h3 {
+    font-size: 1.05rem;
+  }
+
+  .shop-note ol {
+    margin: var(--space-3) 0;
+    padding-left: 1.2rem;
+    color: var(--ink-2);
+    font-size: 0.93rem;
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .shop-note p {
+    color: var(--ink-2);
+    font-size: 0.88rem;
+    margin-bottom: 0;
+  }
+
+  .maker-note {
+    max-width: 46rem;
+  }
+
+  .maker-note .btn {
+    margin-top: var(--space-3);
+  }
+
+  .filter-noscript-hint {
+    font-size: 0.85rem;
+    color: var(--ink-2);
+    margin-top: var(--space-4);
+  }
+
+  .shop-empty {
+    text-align: center;
+    padding: clamp(2rem, 5vw, 3rem) var(--space-5);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-alt);
+    grid-column: 1 / -1;
+  }
+
+  .shop-empty p {
+    color: var(--ink-2);
+    margin-bottom: var(--space-4);
+  }
+</style>

@@ -1,0 +1,300 @@
+---
+import { site, nav } from '../data/site';
+
+const path = Astro.url.pathname;
+const isActive = (url: string) =>
+  url === '/' ? path === '/' : path === url || path.startsWith(url + '/');
+
+const joinCta = '/join-us';
+---
+
+<header class="site-header" data-path={path}>
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label={`${site.name} — home`}>
+      <span class="brand__mark" aria-hidden="true">E</span>
+      <span class="brand__text">
+        <span class="brand__name">Enactus <em>ARSD</em></span>
+        <span class="brand__sub">ARSD College · University of Delhi</span>
+      </span>
+    </a>
+
+    <nav class="main-nav" aria-label="Primary">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.url}
+                class={`nav-link ${isActive(item.url) ? 'is-active' : ''}`}
+                aria-current={isActive(item.url) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a class="btn btn--accent join-btn" href={joinCta}>Join Us</a>
+
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+      aria-label="Open menu"
+      data-menu-toggle
+    >
+      <span class="menu-toggle__bar" aria-hidden="true"></span>
+      <span class="menu-toggle__bar" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <div class="mobile-nav" id="mobile-nav" hidden>
+    <nav aria-label="Mobile">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.url}
+                class={`mobile-link ${isActive(item.url) ? 'is-active' : ''}`}
+                aria-current={isActive(item.url) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a href={joinCta} class="mobile-link mobile-link--cta">Join Us</a>
+        </li>
+      </ul>
+      <p class="mobile-nav__note">
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+      </p>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  [data-path='/'] + .body-hero .site-header,
+  .site-header::after {
+    content: none;
+  }
+
+  .header-inner {
+    min-height: var(--header-h);
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-right: auto;
+  }
+
+  .brand__mark {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    background: var(--dark);
+    color: var(--accent);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.15rem;
+    border-radius: 10px;
+  }
+
+  .brand__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+
+  .brand__name {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  .brand__name em {
+    font-style: normal;
+    color: var(--accent-deep);
+  }
+
+  .brand__sub {
+    font-size: 0.68rem;
+    color: var(--ink-2);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  .main-nav ul {
+    display: flex;
+    gap: 1.6rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
+    font-family: var(--font-heading);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--ink-2);
+    padding: 0.4rem 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .nav-link:hover {
+    color: var(--ink);
+  }
+
+  .nav-link.is-active {
+    color: var(--ink);
+    border-bottom-color: var(--accent);
+  }
+
+  .join-btn {
+    padding: 0.65rem 1.25rem;
+    font-size: 0.88rem;
+  }
+
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    padding: 0.55rem;
+    border-radius: 8px;
+  }
+
+  .menu-toggle__bar {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--ink);
+    margin: 5px 0;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  .menu-toggle[aria-expanded='true'] .menu-toggle__bar:first-child {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .menu-toggle[aria-expanded='true'] .menu-toggle__bar:last-child {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .mobile-nav {
+    border-top: 1px solid var(--border);
+    background: #fff;
+  }
+
+  .mobile-nav[hidden] {
+    display: none;
+  }
+
+  .mobile-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: var(--space-3) var(--space-5) var(--space-4);
+  }
+
+  .mobile-link {
+    display: block;
+    padding: 0.85rem 0.25rem;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--ink);
+    border-bottom: 1px solid var(--border);
+    min-height: 44px;
+  }
+
+  .mobile-link.is-active {
+    color: var(--accent-deep);
+  }
+
+  .mobile-link--cta {
+    color: var(--accent-deep);
+  }
+
+  .mobile-nav__note {
+    padding: 0.9rem var(--space-5) 0.85rem;
+    font-size: 0.85rem;
+  }
+
+  .mobile-nav__note a {
+    color: var(--ink-2);
+  }
+
+  @media (max-width: 1080px) {
+    .main-nav,
+    .join-btn {
+      display: none;
+    }
+
+    .menu-toggle {
+      display: block;
+    }
+  }
+
+  @media (min-width: 1081px) {
+    .mobile-nav {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Mobile drawer behaviour: toggle, close on route click, close on Escape,
+  // lock background scroll while open.
+  const header = document.querySelector<HTMLElement>('.site-header');
+  const toggle = header?.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const drawer = header?.querySelector<HTMLElement>('#mobile-nav');
+
+  const setOpen = (open: boolean) => {
+    if (!toggle || !drawer) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    drawer.hidden = !open;
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+
+  toggle?.addEventListener('click', () => {
+    setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+  });
+
+  drawer?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 1080) setOpen(false);
+  });
+</script>
